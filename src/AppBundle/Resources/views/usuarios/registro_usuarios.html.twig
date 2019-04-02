@@ -1,0 +1,100 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Accoun users</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Account
+                    </div>
+                    <div class="panel-body small">
+                        <div class="form-row small">
+                            <div class="col-md-12">
+                                {% for msg in app.session.flashbag().get('estatus') %}
+                                    <div class="alert alert-info" aria-label="Close">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        <strong>Info!</strong> {{ msg }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {{ form_start(form, {'attr': {'onsubmit':'return validarUsuario();'} } ) }}
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        {{ form_label(form.nombre) }}
+                                        {{ form_widget(form.nombre, { 'id': 'nombre' }) }}
+                                        <span class="text-danger">{{ form_errors(form.nombre) }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_label(form.apellidos) }}
+                                        {{ form_widget(form.apellidos) }}
+                                        <span class="text-danger">{{ form_errors(form.apellidos) }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.email) }}
+                                    {{ form_widget(form.email, { 'id': 'email' }) }}
+                                    <span class="text-danger">{{ form_errors(form.email) }}</span>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.role) }}
+                                    {{ form_widget(form.role) }}
+                                    <span class="text-danger">{{ form_errors(form.role) }}</span>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.password.first) }}
+                                    {{ form_widget(form.password.first, { 'id': 'passwordUno' }) }}
+                                    <span class="text-danger">{{ form_errors(form.password.first) }}</span>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.password.second) }}
+                                    {{ form_widget(form.password.second, { 'id': 'passwordDos' }) }}
+                                    <span class="text-danger">{{ form_errors(form.password.second) }}</span>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_widget(form.Save) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_widget(form.Clean) }}
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Instructions
+                    </div>
+                    <div class="panel-body small">
+                        Fill all requested fields, remember that the email field must be unique, therefore you can not repeat an email that already exists. <br> <br>
+                        You are advised to use alphanumeric passwords, which contain:<br><br>
+                        <dt>Uppercase 
+                        <dd> - A B C D
+                        <dt>Lowercase
+                        <dd> - a b c d 
+                        <dt>Numbers
+                        <dd> - 1 2 3 4
+                        <dt>Characters
+                        <dd> - @ # $ %
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script src="{{ asset ('vendor/js/js_pagina/usuarios/validarUsuario.js') }}"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+{% include '@App/plantillas/fin.html.twig' %}

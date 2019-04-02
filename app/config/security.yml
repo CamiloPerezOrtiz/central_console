@@ -1,0 +1,40 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        AppBundle\Entity\usuarios: # Se hace mecnion sobre que entidad se va a trabajar 
+            algorithm: bcrypt # Se estable el metodo de encrytamiento de la contraseña 
+            cost: 4 # El numero de cost el cual se encryṕtara la contraseña
+        AppBundle\Entity\editar_usuario: # Se hace mecnion sobre que entidad se va a trabajar 
+            algorithm: bcrypt # Se estable el metodo de encrytamiento de la contraseña 
+            cost: 4 # El numero de cost el cual se encryṕtara la contraseña 
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        central_console_warriors: # Se coloca el nombre de base detoas con la cual se va a trabajar 
+            entity:
+                class: AppBundle:usuarios # El nombre de la entidad sobre la cual se va a trabajar 
+                property: email # el campo sobre el cual se va trabajar
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: ~
+            provider: central_console_warriors # Se coloca el nombre de base detoas con la cual se va a trabajar
+            form_login:
+                login_path: /login
+                check_path: /login_check
+            logout:
+                path: logout
+                target: /login
+            # activate different ways to authenticate
+
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            #form_login: ~

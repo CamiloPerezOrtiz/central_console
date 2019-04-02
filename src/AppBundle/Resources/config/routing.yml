@@ -1,0 +1,67 @@
+principal_homepage:
+    path:     /
+    defaults: { _controller: AppBundle:Default:index }
+
+# Login #
+
+login:
+    path:     /login
+    defaults: { _controller: AppBundle:usuarios:login }
+
+login_check:
+    path:     /login_check
+
+validacion_login:
+    path:     /validacion_login
+    defaults: { _controller: AppBundle:usuarios:validacion_login }
+
+# Dashboard # 
+
+dashboard:
+    path:     /dashboard
+    defaults: {_controller: AppBundle:usuarios:dashboard }
+
+# Logout #
+
+logout:
+    path:     /logout
+
+# Grupos #
+
+leer_archivo_txt:
+    path:     /leer_archivo_txt 
+    defaults: { _controller: AppBundle:grupos:leer_archivo_txt }
+
+grupos:
+    path:     /grupos 
+    defaults: { _controller: AppBundle:grupos:grupos }
+
+ver_ip:
+    path:     /ver_ip
+    defaults: { _controller: AppBundle:grupos:ver_ip }
+
+# Usuarios #
+
+lista_usuarios:
+    path:     /lista_usuarios 
+    defaults: { _controller: AppBundle:usuarios:lista_usuarios }
+
+registro_usuario_grupo:
+    path:     /registro_usuario_grupo/{grupo}
+    defaults: { _controller: AppBundle:usuarios:registro_usuario_grupo }
+
+registro_usuario:
+    path:     /registro_usuario
+    defaults: { _controller: AppBundle:usuarios:registro_usuario }
+
+actualizar_estado:
+    path:     /actualizar_estado/{id}  
+    defaults: { _controller: AppBundle:usuarios:actualizar_estado }
+
+editar_usuario:
+    path:     /editar_usuario/{id}
+    defaults: { _controller: AppBundle:usuarios:editar_usuario }
+
+eliminar_usuario:
+    path:     /eliminar_usuario/{id}
+    defaults: { _controller: AppBundle:usuarios:eliminar_usuario }

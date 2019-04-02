@@ -1,0 +1,75 @@
+{% if app.user != null %}
+    <META HTTP-EQUIV="Refresh" CONTENT="0; URL={{path('dashboard')}}">
+{% else %}
+	<!DOCTYPE html>
+	<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Login Warriors Lab's</title>
+        <link href="{{ asset ('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	    <link href="{{ asset ('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset ('vendor/css/login.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="icon" type="image/x-icon" href="{{ asset('log.ico') }}" />
+    </head>
+    <body>
+		{% for msg in app.session.flashbag().get('estatus') %}
+            <div class="container">
+            	<div class="col-md-12">
+                    <div class="alert alert-info" aria-label="Close">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Info!</strong> {{ msg }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="container">
+            <br>
+            {% if error %}
+                <div class="col-md-12">
+                    <div class="alert alert-danger" aria-label="Close">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+		<div class="login-box">
+            <form action="{{path('login_check')}}" method="post" onsubmit="return validar_login();" name="login" class="login-form">
+                <h1>Login</h1>
+                <div class="textbox">
+                    <i class="fas fa-envelope"></i>
+                    <input ttype="email" id="username" name="_username" placeholder="Email" value="{{ last_username }}" required>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="_password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn">Sign in!</button>
+                <input type="hidden" name="_target_path" value="/validacion_login"/>
+            </form>
+        </div>
+        <footer class="text-center">
+            <div class="container">
+                <span>Warriors labs <sup>©</sup> All Rights Reserved.</span>
+            </div>
+        </footer>
+	    <script src="{{ asset ('vendor/jquery/jquery.min.js') }}"></script>
+		<script src="{{ asset ('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+		<script src="{{ asset ('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+	    <script src="{{ asset ('vendor/js/sweetalert.min.js') }}"></script>
+	    <script src="{{ asset ('vendor/js/js_pagina/login/validar_login.js') }}"></script>
+	    <script>
+	        window.setTimeout(function() {
+	            $(".alert").fadeTo(5000, 0).slideUp(500, function(){
+	                $(this).remove(); 
+	            });
+	        }, 4000);
+	    </script>
+    </body>
+	</html>
+{% endif %}

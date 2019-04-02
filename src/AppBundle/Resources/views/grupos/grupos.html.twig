@@ -1,0 +1,55 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    {% if app.user.role == 'ROLE_SUPERUSER' %}
+                        All groups
+                    {% endif %}
+                    {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
+                        Your group
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            {% for grupos in grupo %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-fw fa-list fa-4x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">
+                                        <h4> {{ grupos.grupo }} </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{ path('ver_ip',{ id:grupos.grupo }) }}">
+                            <div class="panel-footer">
+                                <span class="pull-left">Show IP</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                        {% if app.user.role == "ROLE_SUPERUSER" or app.user.role == "ROLE_ADMINISTRATOR" %}
+                            <a href="{{ path('registro_usuario_grupo',{ grupo:grupos.grupo }) }}">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Register an administrator or user</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+{% include '@App/plantillas/fin.html.twig' %}

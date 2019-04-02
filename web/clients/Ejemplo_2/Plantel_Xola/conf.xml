@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+	<squidguardacl>
+			<config>
+				<disabled></disabled>
+				<name>Instagram</name>
+				<source>192.168.0.1 192.168.0.2 192.168.0.3 192.168.0.4</source>
+				<time></time>
+				<dest>Facebook Instagram all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_int</redirect_mode>
+				<redirect>ERROR</redirect>
+				<safesearch></safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description>Bloquear instagram</description>
+				<enablelog></enablelog>
+			</config>
+			<config>
+				<disabled></disabled>
+				<name>Facebook</name>
+				<source>192.168.0.1 192.168.0.2 192.168.0.3 192.168.0.4</source>
+				<time></time>
+				<dest>all all all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect>192.168.0.1 192.168.0.2 192.168.0.3 192.168.0.4</redirect>
+				<safesearch></safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog></enablelog>
+			</config>
+	</squidguardacl>

@@ -1,0 +1,140 @@
+{% include '@App/plantillas/Cabecera.html.twig' %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    {% if app.user.role == 'ROLE_SUPERUSER' %}
+                        List super user - administrator - user
+                    {% endif %}
+                    {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
+                        List administrator - user
+                    {% endif %}
+                    {% if app.user.role == 'ROLE_USER' %}
+                        List user
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        {% if app.user.role == 'ROLE_SUPERUSER' %}
+                        Table super user - administrator - user
+                        {% endif %}
+                        {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
+                            Table Administrator - user
+                        {% endif %}
+                        {% if app.user.role == 'ROLE_USER' %}
+                            Table User
+                        {% endif %}
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            {% if app.user.role == 'ROLE_SUPERUSER' %}
+                                <a href="{{ path('registroUsuario') }}">
+                                    <button type="button" class="btn btn-success">
+                                        Add super user <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                    </button>
+                                </a>
+                                <br><br>
+                            {% endif %}
+                            <table class="table table-sm table-striped table-bordered table-hover text-center table-condensed small " id="dataTables-example">
+                                <div class="col-md-12">
+                                    {% for msg in app.session.flashbag().get('estatus') %}
+                                        <div class="alert alert-info" aria-label="Close">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <strong>Info!</strong> {{ msg }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>                         
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Group</th>
+                                        {% if app.user.role == 'ROLE_SUPERUSER' %}
+                                            <th>Status</th>
+                                        {% endif %}
+                                        {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
+                                            <th>Operations</th>
+                                        {% endif %}                                 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lista_usuarios in usuarios %}
+                                        <tr>
+                                            <td>{{ lista_usuarios.nombre }} {{ lista_usuarios.apellidos }}</td>
+                                            <td>{{ lista_usuarios.email }}</td>
+                                            <td>{{ lista_usuarios.role }}</td>
+                                            <td>{{ lista_usuarios.grupo }}</td>
+                                            {% if app.user.role == 'ROLE_SUPERUSER' %}
+                                                <td>
+                                                    <a href="{{ path('actualizar_estado',{id:lista_usuarios.id})}}"  data-toggle="tooltip" data-placement="right" 
+                                                        {% if lista_usuarios.estado == true %}
+                                                            title="Press to disabled "        
+                                                        {% endif %}
+                                                        {% if lista_usuarios.estado == false %}
+                                                             title="Press to active"
+                                                        {% endif %} name="status">
+                                                        {% if lista_usuarios.estado == true %}
+                                                            Active       
+                                                        {% endif %}
+                                                        {% if lista_usuarios.estado == false %}
+                                                            Disabled 
+                                                        {% endif %}
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+                                            {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
+                                                <td>
+                                                    <a class="btn btn-warning btn-xs" href="{{ path('editar_usuario',{id:lista_usuarios.id}) }}">
+                                                        Edit user <i class="fas fa-user-edit"></i>
+                                                    </a>
+                                                    <a class="btn btn-danger btn-xs" href="{{ path('eliminar_usuario',{id:lista_usuarios.id}) }}">
+                                                        Delete user <i class="fas fa-user-minus"></i>
+                                                    </a>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script src="{{ asset ('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset ('vendor/datatables/dataTables.bootstrap.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+ <script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+                responsive: true
+        });
+    });
+</script>
+{% include '@App/plantillas/fin.html.twig' %}
