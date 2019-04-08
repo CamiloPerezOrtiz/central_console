@@ -26,7 +26,7 @@ class usuarios implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=20)
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 3,
@@ -45,7 +45,7 @@ class usuarios implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos", type="string", length=50)
+     * @ORM\Column(name="apellidos", type="string", length=50, nullable=true)
      * @Assert\Length(
      *      min = 3,
      *      max = 50,
@@ -97,7 +97,6 @@ class usuarios implements UserInterface
      * @var string
      *
      * @ORM\Column(name="grupo", type="string", length=50)
-     * @Assert\NotBlank
      */
     private $grupo;
 

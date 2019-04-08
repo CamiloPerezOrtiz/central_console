@@ -1,4 +1,4 @@
-{% include '@App/plantillas/Cabecera.html.twig' %}
+{% include '@App/plantillas/cabecera.html.twig' %}
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -33,7 +33,7 @@
                     <div class="panel-body">
                         <div class="table-responsive">
                             {% if app.user.role == 'ROLE_SUPERUSER' %}
-                                <a href="{{ path('registroUsuario') }}">
+                                <a href="{{ path('registro_usuario') }}">
                                     <button type="button" class="btn btn-success">
                                         Add super user <i class="fa fa-user-plus" aria-hidden="true"></i>
                                     </button>

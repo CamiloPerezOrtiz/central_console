@@ -31,16 +31,16 @@ class grupos
     /**
      * @var string
      *
-     * @ORM\Column(name="grupo", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=50)
      */
-    private $grupo;
+    private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="plantel", type="string", length=50)
+     * @ORM\Column(name="descripcion", type="string", length=50)
      */
-    private $plantel;
+    private $descripcion;
 
 
     /**
@@ -78,51 +78,51 @@ class grupos
     }
 
     /**
-     * Set grupo
+     * Set nombre
      *
-     * @param string $grupo
+     * @param string $nombre
      *
-     * @return grupos
+     * @return nombre
      */
-    public function setGrupo($grupo)
+    public function setNombre($nombre)
     {
-        $this->grupo = $grupo;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get grupo
+     * Get nombre
      *
      * @return string
      */
-    public function getGrupo()
+    public function getNombre()
     {
-        return $this->grupo;
+        return $this->nombre;
     }
 
     /**
-     * Set plantel
+     * Set descripcion
      *
-     * @param string $plantel
+     * @param string $descripcion
      *
      * @return grupos
      */
-    public function setPlantel($plantel)
+    public function setDescripcion($descripcion)
     {
-        $this->plantel = $plantel;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Get plantel
+     * Get descripcion
      *
      * @return string
      */
-    public function getPlantel()
+    public function getDescripcion()
     {
-        return $this->plantel;
+        return $this->descripcion;
     }
 }
 

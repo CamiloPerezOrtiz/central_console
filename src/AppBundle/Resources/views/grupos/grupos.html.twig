@@ -24,12 +24,12 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge">
-                                        <h4> {{ grupos.grupo }} </h4>
+                                        <h4> {{ grupos.nombre }} </h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a href="{{ path('ver_ip',{ id:grupos.grupo }) }}">
+                        <a href="{{ path('ver_ip',{ id:grupos.nombre }) }}">
                             <div class="panel-footer">
                                 <span class="pull-left">Show IP</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -37,7 +37,7 @@
                             </div>
                         </a>
                         {% if app.user.role == "ROLE_SUPERUSER" or app.user.role == "ROLE_ADMINISTRATOR" %}
-                            <a href="{{ path('registro_usuario_grupo',{ grupo:grupos.grupo }) }}">
+                            <a href="{{ path('registro_usuario_grupo',{ grupo:grupos.nombre }) }}">
                                 <div class="panel-footer">
                                     <span class="pull-left">Register an administrator or user</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

@@ -1,0 +1,16 @@
+em0|BSS|wan|38.124.169.|UI|Plantel_Xola|
+em1|ADMON|lan|10.3.0.|UI|Plantel_Xola|
+em3|LAB|opt1|192.168.3.|UI|Plantel_Xola|
+em2|IUSACELL|opt2|192.168.0.|UI|Plantel_Xola|
+em0|BSS|wan|38.123.201.|UI|Plantel_Norte|
+em1|ADMON|lan|10.4.0.|UI|Plantel_Norte|
+em3|LAB|opt1|192.168.4.|UI|Plantel_Norte|
+em2|IUSACELL|opt2|192.168.0.|UI|Plantel_Norte|
+em0|BBS|wan|170.0.14.|UI|Plantel_Ermita|
+em1|ADMON|lan|10.16.0.|UI|Plantel_Ermita|
+em3|LAB|opt1|192.168.16.|UI|Plantel_Ermita|
+em2|IUSACELL|opt2|192.168.0.|UI|Plantel_Ermita|
+em2|IUSACELL|wan|192.168.0.|UI|Plantel_Ciudad_Azteca|
+em1|ADMON|lan|10.7.0.|UI|Plantel_Ciudad_Azteca|
+em3|LAB|opt1|192.168.7.|UI|Plantel_Ciudad_Azteca|
+em0|BBS|opt2|38.123.204.|UI|Plantel_Ciudad_Azteca|

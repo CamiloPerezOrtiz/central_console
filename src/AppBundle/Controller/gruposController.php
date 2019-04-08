@@ -107,7 +107,7 @@ class gruposController extends Controller
 			'grupo: '.$grupo.'<br/>';
 			'plantel: '.$plantel.'<br/><br/>';
 			$query_insertar_interfaces = "INSERT INTO interfaces VALUES (nextval('interfaces_id_seq'),'$interfaz','$tipo','$nombre','$ip','$grupo','$plantel')";
-			$stmtquery_insertar_interfaces = $db->prepare($query_insertarquery_insertar_interfaces);
+			$stmtquery_insertar_interfaces = $db->prepare($query_insertar_interfaces);
 			$paramsquery_insertar_interfaces =array();
 			$stmtquery_insertar_interfaces->execute($paramsquery_insertar_interfaces);
 			$flushquery_insertar_interfaces=$em->flush();
@@ -153,7 +153,7 @@ class gruposController extends Controller
 		{
 			$grupo=$u->getGrupo();
 			$grupos = $this->obtener_ip_plantel_grupos($grupo);
-			return $this->render("@App/grupos/aplicarCambiosIp.html.twig", array(
+			return $this->render("@App/grupos/ver_ip.html.twig", array(
 				"grupos"=>$grupos
 			));
 		}
@@ -164,7 +164,7 @@ class gruposController extends Controller
 	private function obtener_nombre_grupo($grupo)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$query = $em->createQuery('SELECT g.plantel FROM AppBundle:grupos g WHERE g.grupo = :grupo')->setParameter('grupo', $grupo);;
+		$query = $em->createQuery('SELECT g.descripcion FROM AppBundle:grupos g WHERE g.nombre = :grupo')->setParameter('grupo', $grupo);;
 		$grupos = $query->getResult();
 		return $grupos;
 	}
@@ -172,7 +172,7 @@ class gruposController extends Controller
 	private function recuperar_grupo_grupos()
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$query = $em->createQuery('SELECT DISTINCT g.grupo FROM AppBundle:grupos g ORDER BY g.grupo ASC');
+		$query = $em->createQuery('SELECT DISTINCT g.nombre FROM AppBundle:grupos g ORDER BY g.nombre ASC');
 		$grupos = $query->getResult();
 		return $grupos;
 	}
@@ -180,8 +180,8 @@ class gruposController extends Controller
 	private function obtener_ip_plantel_grupos($grupo)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$query = $em->createQuery('SELECT g.id, g.ip, g.plantel FROM AppBundle:grupos g
-			WHERE g.grupo = :grupo ORDER BY g.plantel ASC')->setParameter('grupo', $grupo);
+		$query = $em->createQuery('SELECT g.id, g.ip, g.descripcion FROM AppBundle:grupos g
+			WHERE g.nombre = :grupo ORDER BY g.descripcion ASC')->setParameter('grupo', $grupo);
 		$grupos = $query->getResult();
 		return $grupos;
 	}

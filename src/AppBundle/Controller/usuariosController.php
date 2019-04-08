@@ -182,7 +182,7 @@ class usuariosController extends Controller
 	private function recuperar_todos_usuarios_superuser()
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$query = $em->createQuery('SELECT u.id, u.nombre, u.apellidos, u.email, u.role, u.estado, u.grupo FROM PrincipalBundle:Usuarios u');
+		$query = $em->createQuery('SELECT u.id, u.nombre, u.apellidos, u.email, u.role, u.estado, u.grupo FROM AppBundle:Usuarios u');
 		$usuarios = $query->getResult();
 		return $usuarios;
 	}
@@ -190,7 +190,7 @@ class usuariosController extends Controller
 	private function recuperar_todos_usuarios_administrador($grupo)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$query = $em->createQuery('SELECT u.id, u.nombre, u.apellidos, u.email, u.role, u.estado, u.grupo FROM PrincipalBundle:Usuarios u
+		$query = $em->createQuery('SELECT u.id, u.nombre, u.apellidos, u.email, u.role, u.estado, u.grupo FROM AppBundle:Usuarios u
 			WHERE  u.role = :roleAdministrator AND u.grupo = :grupo Or u.role = :roleUser AND u.grupo = :grupo'
 		)->setParameter('roleAdministrator', 'ROLE_ADMINISTRATOR')
 		->setParameter('grupo', $grupo)->setParameter('roleUser', 'ROLE_USER')->setParameter('grupo', $grupo);

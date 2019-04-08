@@ -1,177 +1,132 @@
 {% include '@App/plantillas/cabecera.html.twig' %}
-<div id="page-wrapper">
-    <div class="container-fluid">
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Dashboard
+        </h1>
+    </section>
+    <section class="content">
         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Dashboard</h1>
+            <div class="col-lg-3 col-xs-6 responsive">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>
+                            {% if app.user.role == 'ROLE_SUPERUSER' %}
+                                All groups
+                            {% endif %}
+                            {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
+                                Your group
+                            {% endif %}
+                        </h3>
+                        <p>
+                            Info  
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-folder-o"></i>
+                    </div>
+                    <a href="{{ path('leer_archivo_txt') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>
+                            {% if app.user.role == 'ROLE_SUPERUSER' %}
+                                All users
+                            {% endif %}
+                            {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
+                                Your users
+                            {% endif %}
+                        </h3>
+                        <p>
+                            Info
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-group"></i>
+                    </div>
+                    <a href="{{ path('lista_usuarios') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>T. categories</h3>
+                        <p>Info</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-certificate"></i>
+                    </div>
+                    <a href="{# path('gruposTarget') #}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>ACL groups</h3>
+                        <p>Info</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shield"></i>
+                    </div>
+                    <a href="{# path('grupos_acl') #}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>Aliases</h3>
+                        <p>Info</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-th-large"></i>
+                    </div>
+                    <a href="{# path('grupos_aliases') #}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>Nats</h3>
+                        <p>Info</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-book"></i>
+                    </div>
+                    <a href="{# path('gruposNat') #}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6 responsive">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>Firewall rules</h3>
+                        <p>Info</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-fire"></i>
+                    </div>
+                    <a href="{# path('gruposFirewall') #}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-users fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">
-                                    {% if app.user.role == 'ROLE_SUPERUSER' %}
-                                        <h3>All groups</h3>
-                                    {% endif %}
-                                    {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
-                                        <h3>Your group</h3>
-                                    {% endif %}
-                                </div>
-                            </div>
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Info</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
                     </div>
-                    <a href="{{ path('leer_archivo_txt') }}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-users fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">
-                                    {% if app.user.role == 'ROLE_SUPERUSER' %}
-                                        <h3>All users</h3>
-                                    {% endif %}
-                                    {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
-                                        <h3>Your users</h3>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+                    <div class="box-footer">
                     </div>
-                    <a href="{# path('listaUsuarios') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-certificate fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge small"><h3>T. categories</h3></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{# path('gruposTarget') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-layer-group fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge"><h3>ACL groups</h3></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{# path('grupos_acl') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-th-large fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge"><h3>Aliases</h3></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{# path('grupos_aliases') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-book-open fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge"><h3>Nats</h3></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{# path('gruposNat') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fas fa-fire fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge"><h3>Firewall rules</h3></div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="{# path('gruposFirewall') #}">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 {% include '@App/plantillas/pie_pagina.html.twig' %}
 {% include '@App/plantillas/fin.html.twig' %}
