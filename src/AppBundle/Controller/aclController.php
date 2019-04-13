@@ -108,6 +108,21 @@ class aclController extends Controller
 				break;
 			}
 		}
+		foreach($xml->config as $config)
+		{
+			if($config->name== $_POST['valor'] )
+			{
+				$estado = $config->disabled;
+				$nombre = $config->name;
+				$cliente = $config->source;
+				$target_rule = $config->dest;
+				$modo_redireccion = $config->redirect_mode;
+				$redireccion = $config->redirect;
+				$descripcion = $config->description;
+				$log = $config->enablelog;
+				break;
+			}
+		}
 		return $this->render("@App/acl/editar_acl.html.twig",array(
 			"ubicacion"=>$plantel,
 			"estado"=>$estado,
