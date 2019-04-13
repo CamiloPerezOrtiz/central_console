@@ -60,11 +60,6 @@
                                 <span class="text-danger">{{ form_errors(form.email) }}</span>
                             </div>
                             <div class="form-group">
-                                {{ form_label(form.role) }}
-                                {{ form_widget(form.role) }}
-                                <span class="text-danger">{{ form_errors(form.role) }}</span>
-                            </div>
-                            <div class="form-group">
                                 {{ form_label(form.password.first) }}
                                 {{ form_widget(form.password.first, { 'id': 'passwordUno' }) }}
                                 <span class="text-danger">{{ form_errors(form.password.first) }}</span>

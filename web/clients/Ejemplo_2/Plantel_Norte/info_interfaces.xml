@@ -1,34 +1,34 @@
 	<interfaces>
 		<wan>
 			<enable></enable>
-			<if>em0</if>
-			<descr><![CDATA[BBS]]></descr>
+			<if>igb0</if>
+			<descr><![CDATA[BSS]]></descr>
 			<alias-address></alias-address>
 			<alias-subnet>32</alias-subnet>
 			<spoofmac></spoofmac>
-			<ipaddr>170.0.14.186</ipaddr>
+			<ipaddr>38.123.201.106</ipaddr>
 			<subnet>28</subnet>
 			<gateway>BBSGW</gateway>
 		</wan>
 		<lan>
 			<enable></enable>
-			<if>em1</if>
+			<if>igb1</if>
 			<descr><![CDATA[ADMON]]></descr>
-			<spoofmac></spoofmac>
-			<ipaddr>10.16.0.200</ipaddr>
+			<ipaddr>10.4.0.200</ipaddr>
 			<subnet>24</subnet>
+			<spoofmac></spoofmac>
 		</lan>
 		<opt1>
 			<descr><![CDATA[LAB]]></descr>
-			<if>em3</if>
+			<if>igb3</if>
 			<enable></enable>
-			<spoofmac></spoofmac>
-			<ipaddr>192.168.16.200</ipaddr>
+			<ipaddr>192.168.4.200</ipaddr>
 			<subnet>24</subnet>
+			<spoofmac></spoofmac>
 		</opt1>
 		<opt2>
 			<descr><![CDATA[IUSACELL]]></descr>
-			<if>em2</if>
+			<if>igb2</if>
 			<enable></enable>
 			<alias-address></alias-address>
 			<alias-subnet>32</alias-subnet>

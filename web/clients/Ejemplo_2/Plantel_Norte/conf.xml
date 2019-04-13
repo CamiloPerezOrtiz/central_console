@@ -1,3 +1,17 @@
 <?xml version='1.0'?>
-	<squidguardacl>
-	</squidguardacl>
+	<aliases>
+		<alias>
+			<name>Soporte</name>
+			<type>host</type>
+			<address>192.168.0.1</address>
+			<descr>Area de soporte</descr>
+			<detail>Becario 1</detail>
+		</alias>
+		<alias>
+			<name>Soporte VIP</name>
+			<type>host</type>
+			<address>38.123.201.1</address>
+			<descr>Area de soporte</descr>
+			<detail></detail>
+		</alias>
+	</aliases>

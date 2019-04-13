@@ -1,7 +1,7 @@
 	<interfaces>
 		<wan>
 			<enable></enable>
-			<if>em0</if>
+			<if>igb0</if>
 			<descr><![CDATA[BBS]]></descr>
 			<alias-address></alias-address>
 			<alias-subnet>32</alias-subnet>
@@ -12,7 +12,7 @@
 		</wan>
 		<lan>
 			<enable></enable>
-			<if>em1</if>
+			<if>igb1</if>
 			<descr><![CDATA[ADMON]]></descr>
 			<spoofmac></spoofmac>
 			<ipaddr>10.16.0.200</ipaddr>
@@ -20,7 +20,7 @@
 		</lan>
 		<opt1>
 			<descr><![CDATA[LAB]]></descr>
-			<if>em3</if>
+			<if>igb3</if>
 			<enable></enable>
 			<spoofmac></spoofmac>
 			<ipaddr>192.168.16.200</ipaddr>
@@ -28,7 +28,7 @@
 		</opt1>
 		<opt2>
 			<descr><![CDATA[IUSACELL]]></descr>
-			<if>em2</if>
+			<if>igb2</if>
 			<enable></enable>
 			<alias-address></alias-address>
 			<alias-subnet>32</alias-subnet>

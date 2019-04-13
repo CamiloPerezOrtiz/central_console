@@ -1,0 +1,85 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            List groups ACL campus {{ubicacion}}
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
+                            <a href="{{ path('registro_acl',{'id': app.user.grupo }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
+                        {% endif %} 
+                    </div>
+                    <div class="box-body">
+                        <div class="box-body table-responsive no-padding">
+                            <table id="example1" class="table table-bordered table-hover text-center">
+                                <div class="col-md-12">
+                                    {% for msg in app.session.flashbag().get('estatus') %}
+                                        <div class="alert alert-info" aria-label="Close">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <strong>Info!</strong> {{ msg }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <thead>
+                                    <tr>
+                                        <th>Disabled</th>
+                                        <th>Name</th> 
+                                        <th>Description</th>
+                                        {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        {% endif %}  
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in xmls %}
+                                        <tr>
+                                            <td>{{ item.disabled }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.description }}</td>
+                                            {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
+                                                <td>
+                                                    <form method="post" action="{{ path('editar_acl') }}">
+                                                        <input type="hidden" name="plantel" value="{{ubicacion}}">
+                                                        <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <button class="btn btn-warning btn-xs" type="submit">Edit <i class="fa fa-edit"></i></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form method="post" action="{{ path('eliminar_acl') }}">
+                                                        <input type="hidden" name="plantel" value="{{ubicacion}}">
+                                                        <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <button class="btn btn-danger btn-xs" type="submit">Delete <i class="fa fa-remove"></i></button>
+                                                    </form>
+                                                </td>
+                                            {% endif %} 
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script src="{{ asset ('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset ('vendor/datatables/dataTables.bootstrap.min.js') }}"></script>
+ <script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+{% include '@App/plantillas/fin.html.twig' %}

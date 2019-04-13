@@ -8,13 +8,23 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header">
-                        <button type="button" class="btn btn-success btn-flat" data-toggle="modal" data-target="#agregar_usuario">Agregar usuario</button>
+                        {% if app.user.role == 'ROLE_SUPERUSER' %}
+                            <a href="{{ path('registro_super_usuario') }}" class="btn btn-success btn-flat">Add super user</a>
+                        {% endif %} 
                     </div>
                     <div class="box-body">
                         <div class="box-body table-responsive no-padding">
                             <table id="example1" class="table table-bordered table-hover text-center">
+                                <div class="col-md-12">
+                                    {% for msg in app.session.flashbag().get('estatus') %}
+                                        <div class="alert alert-info" aria-label="Close">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <strong>Info!</strong> {{ msg }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
                                 <thead>
                                     <tr>
                                         <th>Name</th>                         
@@ -39,7 +49,7 @@
                                             <td>{{ lista_usuarios.grupo }}</td>
                                             {% if app.user.role == 'ROLE_SUPERUSER' %}
                                                 <td>
-                                                    <a href="{{ path('actualizar_estado',{id:lista_usuarios.id})}}"  data-toggle="tooltip" data-placement="right" 
+                                                    <a href="{{ path('actualizar_estado',{email:lista_usuarios.email})}}"  data-toggle="tooltip" data-placement="right" 
                                                         {% if lista_usuarios.estado == true %}
                                                             title="Press to disabled "        
                                                         {% endif %}
@@ -58,12 +68,12 @@
                                             {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
                                                 <td>
                                                     <a class="btn btn-warning btn-xs" href="{{ path('editar_usuario',{id:lista_usuarios.id}) }}">
-                                                        Edit user <i class="fas fa-user-edit"></i>
+                                                        Edit user <i class="fa fa-edit"></i>
                                                     </a>
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-danger btn-xs" href="{{ path('eliminar_usuario',{id:lista_usuarios.id}) }}">
-                                                        Delete user <i class="fas fa-user-minus"></i>
+                                                        Delete user <i class="fa fa-user-times"></i>
                                                     </a>
                                                 </td>
                                             {% endif %}

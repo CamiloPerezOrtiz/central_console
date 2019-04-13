@@ -47,15 +47,15 @@ lista_usuarios:
     defaults: { _controller: AppBundle:usuarios:lista_usuarios }
 
 registro_usuario_grupo:
-    path:     /registro_usuario_grupo/{grupo}
+    path:     /registro_usuario_grupo
     defaults: { _controller: AppBundle:usuarios:registro_usuario_grupo }
 
-registro_usuario:
-    path:     /registro_usuario
-    defaults: { _controller: AppBundle:usuarios:registro_usuario }
+registro_super_usuario:
+    path:     /registro_super_usuario
+    defaults: { _controller: AppBundle:usuarios:registro_super_usuario }
 
 actualizar_estado:
-    path:     /actualizar_estado/{id}  
+    path:     /actualizar_estado/{email}  
     defaults: { _controller: AppBundle:usuarios:actualizar_estado }
 
 editar_usuario:
@@ -65,3 +65,47 @@ editar_usuario:
 eliminar_usuario:
     path:     /eliminar_usuario/{id}
     defaults: { _controller: AppBundle:usuarios:eliminar_usuario }
+
+# Target #
+
+grupos_target:
+    path:     /grupos_target 
+    defaults: { _controller: AppBundle:target:grupos_target }
+
+registro_target:
+    path:     /registro_target
+    defaults: { _controller: AppBundle:target:registro_target }
+
+lista_target:
+    path:     /lista_target 
+    defaults: { _controller: AppBundle:target:lista_target }
+
+editar_target:
+    path:     /editar_target
+    defaults: { _controller: AppBundle:target:editar_target }
+
+eliminar_target:
+    path:     /eliminar_target
+    defaults: { _controller: AppBundle:target:eliminar_target }
+
+# Acl #
+
+grupos_acl:
+    path:     /grupos_acl 
+    defaults: { _controller: AppBundle:acl:grupos_acl }
+
+registro_acl:
+    path:     /registro_acl
+    defaults: { _controller: AppBundle:acl:registro_acl }
+
+lista_acl:
+    path:     /lista_acl 
+    defaults: { _controller: AppBundle:acl:lista_acl }
+
+editar_acl:
+    path:     /editar_acl
+    defaults: { _controller: AppBundle:acl:editar_acl }
+
+eliminar_acl:
+    path:     /eliminar_acl
+    defaults: { _controller: AppBundle:acl:eliminar_acl }
