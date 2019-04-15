@@ -21,7 +21,7 @@
                                 <div class="form-group">
                                     <label>Disabled</label>
                                     <label>
-                                        <input type="hidden" name="estado" value="off">
+                                        <input type="hidden" name="estado" value="">
                                         <input type="checkbox" name="estado" id="estado" value="on" {% if estado == "on" %}checked{% endif %}> Check this to disable this ACL rule.
                                     </label>
                                 </div>
@@ -45,11 +45,54 @@
                                     <label>Target Rules</label>
                                     <input type="text" class="form-control" name="target_rule" id="target_rule" value="{{ target_rule }}" placeholder="Writte the name">
                                 </div>
+                                <div class="form-group">  
+                                    <label>Target Rules List</label><br>
+                                    <label>ACCESS: 'whitelist' - always pass; 'deny' - block; 'allow' - pass, if not blocked.</label>
+                                    <table class="table table-bordered table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Target Categories</th>                                  
+                                                <th>Access</th>
+                                                <th>Values</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in xmls %}
+                                                <tr>
+                                                    <td>
+                                                        {{ item.description }} [{{ item.name }}]
+                                                    </td>
+                                                    <td>access</td>
+                                                    <td>
+                                                        <select name="lista_target[]">
+                                                            <option value="none" >----</option>
+                                                            <option value="^{{ item.name }}" 
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "^"~item.name %} selected {% endif %}
+                                                                {% endfor %}>whitelist
+                                                            </option>
+                                                            <option value="!{{ item.name }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "!"~item.name %} selected {% endif %}
+                                                                {% endfor %}>deny
+                                                            </option>
+                                                            <option value="{{ item.name }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == item.name %} selected {% endif %}
+                                                                {% endfor %}>allow
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="form-group">
                                     <label>Do not allow IP-Addresses in URL</label>
                                     <label>
-                                        <input type="hidden" name="log" value="off">
-                                        <input type="checkbox" name="log" id="log" value="on" {% if log == "on" %}checked{% endif %}> To make sure that people do not bypass the URL filter by simply using the IP-Addresses instead of the FQDN you can check this option. This option has no effect on the whitelist.
+                                        <input type="hidden" name="not_ip" value="">
+                                        <input type="checkbox" name="not_ip" id="not_ip" value="on" {% if not_ip == "on" %}checked{% endif %}> To make sure that people do not bypass the URL filter by simply using the IP-Addresses instead of the FQDN you can check this option. This option has no effect on the whitelist.
                                     </label>
                                 </div>
                                 <div class="form-group">
@@ -86,7 +129,7 @@
                                 <div class="form-group">
                                     <label>Log</label>
                                     <label>
-                                        <input type="hidden" name="log" value="off">
+                                        <input type="hidden" name="log" value="">
                                         <input type="checkbox" name="log" id="log" value="on" {% if log == "on" %}checked{% endif %}> Check this option to enable logging for this ACL.
                                     </label>
                                 </div>

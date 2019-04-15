@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Register target categories
+            Register ACL groups campus {{plantel}}
         </h1>
     </section>
     <section class="content">
@@ -12,25 +12,64 @@
             <div class="col-md-8">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Target categories</h3>
+                        <h3 class="box-title">ACL groups</h3>
                     </div>
                     <form method="post">
+                        <input type="hidden" name="plantel" value="{{plantel}}">
                         <div class="modal-body">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label>Choose the device to be apply change</label>
-                                    <table class="table table-striped table-bordered table-hover">
-                                        <thead class="bg-dark text-white">
-                                            <tr>  
-                                                <th>Device</th>       
+                                    <label>Disabled</label>
+                                    <label>
+                                        <input type="hidden" name="estado" value="">
+                                        <input type="checkbox" name="estado" id="estado" value="on"> Check this to disable this ACL rule.
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Writte the name">
+                                    <small class="help-block">
+                                        Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter. <br>
+                                        The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Client (source)</label>
+                                    <textarea class="form-control" name="cliente" id="cliente" rows="3" placeholder="Writte the client"></textarea>
+                                    <small class="help-block">
+                                        Enter destination domains or IP-addresses here. To separate them use space.<br>
+                                        IP: 192.168.0.1 - Subnet: 192.168.0.0/24 or 192.168.1.0/255.255.255.0 
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Target Rules</label>
+                                    <input type="text" class="form-control" name="target_rule" id="target_rule" placeholder="Writte the name">
+                                </div>
+                                <div class="form-group">  
+                                    <label>Target Rules List</label><br>
+                                    <label>ACCESS: 'whitelist' - always pass; 'deny' - block; 'allow' - pass, if not blocked.</label>
+                                    <table class="table table-bordered table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Target Categories</th>                                  
+                                                <th>Access</th>
+                                                <th>Values</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for grupo in informacion_interfaces_plantel %}
+                                            {% for item in xmls %}
                                                 <tr>
                                                     <td>
-                                                        <input type="checkbox" class="form-check-input" name="plantel[]" value="{{ grupo.descripcion }}" checked> 
-                                                        {{ grupo.descripcion }}
+                                                        {{ item.description }} [{{ item.name }}]
+                                                    </td>
+                                                    <td>access</td>
+                                                    <td>
+                                                        <select name="lista_target[]">
+                                                            <option value="">----</option>
+                                                            <option value="^{{ item.name }}">whitelist</option>
+                                                            <option value="!{{ item.name }}">deny</option>
+                                                            <option value="{{ item.name }}">allow</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -38,35 +77,11 @@
                                     </table>
                                 </div>
                                 <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Writte the name">
-                                    <small class="help-block">
-                                        Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9].
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label>Domain List</label>
-                                    <textarea class="form-control" name="lista_dominios" id="lista_dominios" rows="3" placeholder="Writte the domain list"></textarea>
-                                    <small class="help-block">
-                                        Enter destination domains or IP-addresses here. To separate them use space.<br>
-                                        Example: mail.ru e-mail.ru yahoo.com 192.168.1.1
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label>URL List</label>
-                                    <textarea class="form-control" name="lista_url" id="lista_url" rows="3" placeholder="Writte the url list"></textarea>
-                                    <small class="help-block">
-                                        Enter destination URLs here. To separate them use space.<br>
-                                        Example: host.com/xxx 12.10.220.125/alisa
-                                    </small>
-                                </div>
-                                <div class="form-group">
-                                    <label>Regular Expression</label>
-                                    <textarea class="form-control" name="expression_regular" id="expression_regular" rows="4" placeholder="Writte the regular expression"></textarea>
-                                    <small class="help-block">
-                                        Enter word fragments of the destination URL. To separate them use | . <br>
-                                        Example: mail|casino|game|\.rsdf$
-                                    </small>
+                                    <label>Do not allow IP-Addresses in URL</label>
+                                    <label>
+                                        <input type="hidden" name="not_ip" value="">
+                                        <input type="checkbox" name="not_ip" id="not_ip" value="on"> To make sure that people do not bypass the URL filter by simply using the IP-Addresses instead of the FQDN you can check this option. This option has no effect on the whitelist.
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label>Redirect mode</label>
@@ -102,7 +117,7 @@
                                 <div class="form-group">
                                     <label>Log</label>
                                     <label>
-                                        <input type="hidden" name="log" value="off">
+                                        <input type="hidden" name="log" value="">
                                         <input type="checkbox" name="log" id="log" value="on"> Check this option to enable logging for this ACL.
                                     </label>
                                 </div>

@@ -109,3 +109,25 @@ editar_acl:
 eliminar_acl:
     path:     /eliminar_acl
     defaults: { _controller: AppBundle:acl:eliminar_acl }
+
+# Aliases #
+
+grupos_aliases:
+    path:     /grupos_aliases 
+    defaults: { _controller: AppBundle:aliases:grupos_aliases }
+
+registro_aliases:
+    path:     /registro_aliases
+    defaults: { _controller: AppBundle:aliases:registro_aliases }
+
+lista_aliases:
+    path:     /lista_aliases 
+    defaults: { _controller: AppBundle:aliases:lista_aliases }
+
+editar_aliases:
+    path:     /editar_aliases
+    defaults: { _controller: AppBundle:aliases:editar_aliases }
+
+eliminar_aliases:
+    path:     /eliminar_aliases
+    defaults: { _controller: AppBundle:aliases:eliminar_aliases }

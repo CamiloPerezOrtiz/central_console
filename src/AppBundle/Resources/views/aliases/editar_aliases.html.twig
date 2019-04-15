@@ -1,0 +1,146 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Edit Aliases
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Aliases</h3>
+                    </div>
+                    <form method="post">
+                        <input type="hidden" name="plantel" value="{{ubicacion}}">
+                        <div class="modal-body">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ nombre }}" placeholder="Writte the name">
+                                    <small class="help-block">
+                                        Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter. <br>
+                                        The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" name="descripcion" class="form-control" value="{{ descripcion }}" placeholder="Writte the descripcion">
+                                    <small class="help-block">
+                                        A description may be entered here for administrative reference. 
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select name="tipo" class="form-control input-sm" onChange="mostrar(this.value);">
+                                        <option value="host" {% if tipo == "host" %}selected{% endif %}>Host(s)</option>
+                                        <option value="network" {% if tipo == "network" %}selected{% endif %}>Network(s)</option>
+                                        <option value="port" {% if tipo == "port" %}selected{% endif %}>Port(s)</option>
+                                        <option value="url" {% if tipo == "url" %}selected{% endif %}>URL (IPs)</option>
+                                        <option value="url_ports" {% if tipo == "url_ports" %}selected{% endif %}>URL (Ports)</option>
+                                        <option value="urltable" {% if tipo == "urltable" %}selected{% endif %}>URL Table (IPs)</option>
+                                        <option value="urltable_ports" {% if tipo == "urltable_ports" %}selected{% endif %}>URL Table (Ports)</option>
+                                    </select>
+                                    <small class="help-block">
+                                        A description may be entered here for administrative reference. 
+                                    </small>
+                                </div>
+                                <div class="form-group">  
+                                    <div id="host" style="display:;">
+                                        <label>Host(s)</label> 
+                                        <footer class="small">
+                                            Enter as many hosts as desired. Hosts must be specified by their IP address or fully qualified domain name.
+                                            Example 125
+                                        </footer>
+                                    </div>
+                                    <div id="network" style="display: none;">
+                                        <label>Network(s)</label> 
+                                        <footer class="small">
+                                            Networks are specified in CIDR format. Select the CIDR mask that pertains to each entry. /32 specifies a single IPv4 host, /128 specifies a single IPv6 host, /24 specifies 255.255.255.0, /64 specifies a normal IPv6 network, etc. Hostnames (FQDNs) may also be specified, using a /32 mask for IPv4 or /128 for IPv6. Example 125/32
+                                        </footer>
+                                    </div>
+                                    <div id="port" style="display: none;">
+                                        <label>Port(s)</label> 
+                                        <footer class="small">Enter ports as desired, with a single port or port range per entry. Port ranges can be expressed by separating with a colon.</footer>
+                                    </div>
+                                    <div id="url" style="display: none;">
+                                        <label>URL (Ips)</label> 
+                                        <footer class="small">Enter as many URLs as desired. After saving, the URLs will be downloaded and the items imported into the alias. Use only with small sets of IP addresses (less than 3000).</footer>
+                                    </div>
+                                    <div id="url_ports" style="display: none;">
+                                        <label>URL (Ports)</label> 
+                                        <footer class="small">Enter as many URLs as desired. After saving, the URLs will be downloaded and the items imported into the alias. Use only with small sets of Ports (less than 3000).</footer>
+                                    </div>
+                                    <div id="urltable" style="display: none;">
+                                        <label>URL Table (Ips)</label> 
+                                        <footer class="small">Enter a single URL containing a large number of IPs and/or Subnets. After saving, the URLs will be downloaded and a table file containing these addresses will be created. This will work with large numbers of addresses (30,000+) or small numbers. The value after the "/" is the update frequency in days.</footer>
+                                    </div>
+                                    <div id="urltable_ports" style="display: none;">
+                                        <label>URL Table (Ports)</label> 
+                                        <footer class="small">Enter a single URL containing a list of Port numbers and/or Port ranges. After saving, the URL will be downloaded. The value after the "/" is the update frequency in days.</footer>
+                                    </div>
+                                    <div id="productos">
+                                        <div class="form-group"> 
+                                            <div class="lista-producto float-clear">
+                                                <div class="col-md-6">  
+                                                    {% for item in ip_port %}
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="ip_port[]" value="{{ item }}">
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-md-6"> 
+                                                    {% for item2 in descripcion_ip_port %}
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="descripcion_ip_port[]" value="{{ item2 }}">
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <input class="btn btn-success" type="button" name="agregar_registros" value="Add" onClick="agregar_mas();" />
+                                <input class="btn btn-danger" type="button" name="borrar_registros" value="Delete check" onClick="borrar_registro();" />
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" name="guardar" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script src="{{ asset ('js_pagina/aliases/registro_aliases.js') }}"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<script>
+function agregar_mas() {
+    $("<div>").load("js_pagina/aliases/InputDinamico.php", function() {
+            $("#productos").append($(this).html());
+    }); 
+}
+function borrar_registro() {
+    $('div.lista-producto').each(function(index, item){
+        jQuery(':checkbox', this).each(function () {
+            if ($(this).is(':checked')) {
+                $(item).remove();
+            }
+        });
+    });
+}
+</script>
+{% include '@App/plantillas/fin.html.twig' %}

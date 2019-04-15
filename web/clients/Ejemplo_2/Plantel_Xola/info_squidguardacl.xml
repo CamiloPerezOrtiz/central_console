@@ -26,7 +26,7 @@
 				<safesearch></safesearch>
 				<rewrite></rewrite>
 				<overrewrite></overrewrite>
-				<description><![CDATA[terminal]]></description>
+				<description>terminal</description>
 				<enablelog>on</enablelog>
 			</config>
 			<config>

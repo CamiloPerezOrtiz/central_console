@@ -63,35 +63,46 @@ class aclController extends Controller
 			{
 				if($config->name==$_POST['nombre'])
 				{
-					$config->domains = $_POST['lista_dominios'];
-					$config->urls = $_POST['lista_url'];
-					$config->expressions = $_POST['expression_regular'];
+					$config->disabled = $_POST['estado'];
+					$config->name = $_POST['nombre'];
+					$config->source = $_POST['cliente'];
+					$config->time = "";
+					$config->dest = $_POST['target_rule'];
+					$config->notallowingip = $_POST['not_ip'];
 					$config->redirect_mode = $_POST['modo_redireccion'];
 					$config->redirect = $_POST['redireccion'];
+					$config->safesearch = "on";
+					$config->rewrite = "";
+					$config->overrewrite ="";
 					$config->description = $_POST['descripcion'];
 					$config->enablelog = $_POST['log'];
 				}
 			}
 			$xml->asXML("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
-			$contenido = "\t\t<squidguarddest>\n";
+			$contenido = "\t\t<squidguardacl>\n";
 			foreach($xml->config as $config)
 			{
 			    $contenido .= "\t\t\t<config>\n";
+			    $contenido .= "\t\t\t\t<disabled>" . $config->disabled . "</disabled>\n";
 			    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
-			    $contenido .= "\t\t\t\t<domains>" . $config->domains . "</domains>\n";
-			    $contenido .= "\t\t\t\t<urls>" . $config->urls . "</urls>\n";
-			    $contenido .= "\t\t\t\t<expressions>" . $config->expressions . "</expressions>\n";
+			    $contenido .= "\t\t\t\t<source>" . $config->source . "</source>\n";
+			    $contenido .= "\t\t\t\t<time>" . $config->time . "</time>\n";
+			    $contenido .= "\t\t\t\t<dest>" . $config->dest . "</dest>\n";
+			    $contenido .= "\t\t\t\t<notallowingip>" . $config->notallowingip . "</notallowingip>\n";
 			    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
 			    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
+			    $contenido .= "\t\t\t\t<safesearch>" . $config->safesearch . "</safesearch>\n";
+			    $contenido .= "\t\t\t\t<rewrite>" . $config->rewrite . "</rewrite>\n";
+			    $contenido .= "\t\t\t\t<overrewrite>" . $config->overrewrite . "</overrewrite>\n";
 			    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
 			    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
 			    $contenido .= "\t\t\t</config>\n";
 			}
-		    $contenido .= "\t\t</squidguarddest>";
+		    $contenido .= "\t\t</squidguardacl>";
 			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
-			return $this->redirectToRoute("grupos_target");
+			return $this->redirectToRoute("grupos_acl");
 		}
 		foreach($xml->config as $config)
 		{
@@ -101,21 +112,8 @@ class aclController extends Controller
 				$nombre = $config->name;
 				$cliente = $config->source;
 				$target_rule = $config->dest;
-				$modo_redireccion = $config->redirect_mode;
-				$redireccion = $config->redirect;
-				$descripcion = $config->description;
-				$log = $config->enablelog;
-				break;
-			}
-		}
-		foreach($xml->config as $config)
-		{
-			if($config->name== $_POST['valor'] )
-			{
-				$estado = $config->disabled;
-				$nombre = $config->name;
-				$cliente = $config->source;
-				$target_rule = $config->dest;
+				$lista_target = explode(' ',$target_rule);
+				$not_ip = $config->notallowingip;
 				$modo_redireccion = $config->redirect_mode;
 				$redireccion = $config->redirect;
 				$descripcion = $config->description;
@@ -129,14 +127,17 @@ class aclController extends Controller
 			"nombre"=>$nombre,
 			"cliente"=>$cliente,
 			"target_rule"=>$target_rule,
+			"lista_target"=>$lista_target,
+			"not_ip"=>$not_ip,
 			"modo_redireccion"=>$modo_redireccion,
 			"redireccion"=>$redireccion,
 			"descripcion"=>$descripcion,
-			"log"=>$log
+			"log"=>$log,
+			'xmls'=>$xmls= $xml2->config
 		));
 	}
 
-	public function eliminar_targetAction()
+	public function eliminar_aclAction()
 	{
 		$plantel=$_POST['plantel'];
 		$libreria_dom = new \DOMDocument; 
@@ -152,70 +153,83 @@ class aclController extends Controller
 	    }
 	    $libreria_dom->save("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
 	    $xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
-		$contenido = "\t\t<squidguarddest>\n";
+		$contenido = "\t\t<squidguardacl>\n";
 		foreach($xml->config as $config)
 		{
 		    $contenido .= "\t\t\t<config>\n";
+		    $contenido .= "\t\t\t\t<disabled>" . $config->disabled . "</disabled>\n";
 		    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
-		    $contenido .= "\t\t\t\t<domains>" . $config->domains . "</domains>\n";
-		    $contenido .= "\t\t\t\t<urls>" . $config->urls . "</urls>\n";
-		    $contenido .= "\t\t\t\t<expressions>" . $config->expressions . "</expressions>\n";
+		    $contenido .= "\t\t\t\t<source>" . $config->source . "</source>\n";
+		    $contenido .= "\t\t\t\t<time>" . $config->time . "</time>\n";
+		    $contenido .= "\t\t\t\t<dest>" . $config->dest . "</dest>\n";
+		    $contenido .= "\t\t\t\t<notallowingip>" . $config->notallowingip . "</notallowingip>\n";
 		    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
 		    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
+		    $contenido .= "\t\t\t\t<safesearch>" . $config->safesearch . "</safesearch>\n";
+		    $contenido .= "\t\t\t\t<rewrite>" . $config->rewrite . "</rewrite>\n";
+		    $contenido .= "\t\t\t\t<overrewrite>" . $config->overrewrite . "</overrewrite>\n";
 		    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
 		    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
 		    $contenido .= "\t\t\t</config>\n";
 		}
-	    $contenido .= "\t\t</squidguarddest>";
+	    $contenido .= "\t\t</squidguardacl>";
 		$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
-		return $this->redirectToRoute("grupos_target");
+		return $this->redirectToRoute("grupos_acl");
 	}	
 
-	public function registro_targetAction(Request $request)
+	public function registro_aclAction(Request $request)
 	{
-		$ubicacion=$_REQUEST['id'];
-		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($ubicacion);
+		$plantel=$_REQUEST['id'];
+		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
-			foreach($_POST['plantel'] as $plantel_grupo)
+			$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
+			$target_rule = implode(" ",$_POST['lista_target']);
+			$product = $xml->addChild('config');
+			$product->addChild('disabled', $_POST['estado']);
+			$product->addChild('name', $_POST['nombre']);
+			$product->addChild('source', $_POST['cliente']);
+			$product->addChild('time', "");
+			$product->addChild('dest', $target_rule." all [ all]");
+			$product->addChild('notallowingip', $_POST['not_ip']);
+			$product->addChild('redirect_mode', $_POST['modo_redireccion']);
+			$product->addChild('redirect', $_POST['redireccion']);
+			$product->addChild('safesearch', "on");
+			$product->addChild('rewrite', "");
+			$product->addChild('overrewrite', "");
+			$product->addChild('description', $_POST['descripcion']);
+			$product->addChild('enablelog', $_POST['log']);
+			file_put_contents("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", $xml->asXML());
+			$contenido = "\t\t<squidguardacl>\n";
+			foreach($xml->config as $config)
 			{
-				$xml = simplexml_load_file("clients/Ejemplo_2/$plantel_grupo/info_squidguardacl.xml");
-				$product = $xml->addChild('config');
-				$product->addChild('name', $_POST['nombre']);
-				$product->addChild('domains', $_POST['lista_dominios']);
-				$product->addChild('urls', $_POST['lista_url']);
-				$product->addChild('expressions', $_POST['expression_regular']);
-				$product->addChild('redirect_mode', $_POST['modo_redireccion']);
-				$product->addChild('redirect', $_POST['redireccion']);
-				$product->addChild('description', $_POST['descripcion']);
-				$product->addChild('enablelog', $_POST['log']);
-				file_put_contents("clients/Ejemplo_2/$plantel_grupo/info_squidguardacl.xml", $xml->asXML());
-				$contenido = "\t\t<squidguarddest>\n";
-				foreach($xml->config as $config)
-				{
-				    $contenido .= "\t\t\t<config>\n";
-				    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
-				    $contenido .= "\t\t\t\t<domains>" . $config->domains . "</domains>\n";
-				    $contenido .= "\t\t\t\t<urls>" . $config->urls . "</urls>\n";
-				    $contenido .= "\t\t\t\t<expressions>" . $config->expressions . "</expressions>\n";
-				    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
-				    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
-				    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
-				    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
-				    $contenido .= "\t\t\t</config>\n";
-				}
-			    $contenido .= "\t\t</squidguarddest>";
-				$archivo = fopen("clients/Ejemplo_2/$plantel_grupo/info_squidguardacl.xml", 'w');
-				fwrite($archivo, $contenido);
-				fclose($archivo);
+			    $contenido .= "\t\t\t<config>\n";
+			    $contenido .= "\t\t\t\t<disabled>" . $config->disabled . "</disabled>\n";
+			    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
+			    $contenido .= "\t\t\t\t<source>" . $config->source . "</source>\n";
+			    $contenido .= "\t\t\t\t<time>" . $config->time . "</time>\n";
+			    $contenido .= "\t\t\t\t<dest>" . $config->dest . "</dest>\n";
+			    $contenido .= "\t\t\t\t<notallowingip>" . $config->notallowingip . "</notallowingip>\n";
+			    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
+			    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
+			    $contenido .= "\t\t\t\t<safesearch>" . $config->safesearch . "</safesearch>\n";
+			    $contenido .= "\t\t\t\t<rewrite>" . $config->rewrite . "</rewrite>\n";
+			    $contenido .= "\t\t\t\t<overrewrite>" . $config->overrewrite . "</overrewrite>\n";
+			    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
+			    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
+			    $contenido .= "\t\t\t</config>\n";
 			}
-			return $this->redirectToRoute("grupos_target");
+		    $contenido .= "\t\t</squidguardacl>";
+			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
+			fwrite($archivo, $contenido);
+			fclose($archivo);
+			return $this->redirectToRoute("grupos_acl");
 		}
-		return $this->render('@App/target/registro_target.html.twig', array(
-			'informacion_interfaces_plantel'=>$informacion_interfaces_plantel,
-			'ubicacion'=>$ubicacion
+		return $this->render('@App/acl/registro_acl.html.twig', array(
+			'plantel'=>$plantel,
+			'xmls'=>$xmls= $xml->config
 		));
 	}
 
