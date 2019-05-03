@@ -1,0 +1,155 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Edit ACL groups
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">ACL groups</h3>
+                    </div>
+                    <form method="post">
+                        <input type="hidden" name="plantel" value="{{ubicacion}}">
+                        <div class="modal-body">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>Disabled</label>
+                                    <label>
+                                        <input type="hidden" name="estado" value="">
+                                        <input type="checkbox" name="estado" id="estado" value="on" {% if estado == "on" %}checked{% endif %}> Check this to disable this ACL rule.
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ nombre }}" placeholder="Writte the name">
+                                    <small class="help-block">
+                                        Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter. <br>
+                                        The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Client (source)</label>
+                                    <textarea class="form-control" name="cliente" id="cliente" rows="3" placeholder="Writte the client">{{ cliente }}</textarea>
+                                    <small class="help-block">
+                                        Enter destination domains or IP-addresses here. To separate them use space.<br>
+                                        IP: 192.168.0.1 - Subnet: 192.168.0.0/24 or 192.168.1.0/255.255.255.0 
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Target Rules</label>
+                                    <input type="text" class="form-control" name="target_rule" id="target_rule" value="{{ target_rule }}" placeholder="Writte the name">
+                                </div>
+                                <div class="form-group">  
+                                    <label>Target Rules List</label><br>
+                                    <label>ACCESS: 'whitelist' - always pass; 'deny' - block; 'allow' - pass, if not blocked.</label>
+                                    <table class="table table-bordered table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Target Categories</th>                                  
+                                                <th>Access</th>
+                                                <th>Values</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in xmls %}
+                                                <tr>
+                                                    <td>
+                                                        {{ item.description }} [{{ item.name }}]
+                                                    </td>
+                                                    <td>access</td>
+                                                    <td>
+                                                        <select name="lista_target[]">
+                                                            <option value="none" >----</option>
+                                                            <option value="^{{ item.name }}" 
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "^"~item.name %} selected {% endif %}
+                                                                {% endfor %}>whitelist
+                                                            </option>
+                                                            <option value="!{{ item.name }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "!"~item.name %} selected {% endif %}
+                                                                {% endfor %}>deny
+                                                            </option>
+                                                            <option value="{{ item.name }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == item.name %} selected {% endif %}
+                                                                {% endfor %}>allow
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    <label>Do not allow IP-Addresses in URL</label>
+                                    <label>
+                                        <input type="hidden" name="not_ip" value="">
+                                        <input type="checkbox" name="not_ip" id="not_ip" value="on" {% if not_ip == "on" %}checked{% endif %}> To make sure that people do not bypass the URL filter by simply using the IP-Addresses instead of the FQDN you can check this option. This option has no effect on the whitelist.
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Redirect mode</label>
+                                    <select class="form-control" name="modo_redireccion" id="modo_redireccion">
+                                        <option value="rmod_none" {% if modo_redireccion == "rmod_none" %}selected{% endif %}>none</option>
+                                        <option value="rmod_int" {% if modo_redireccion == "rmod_int" %}selected{% endif %}>int error page (enter error message)</option>
+                                        <option value="rmod_int_bpg" {% if modo_redireccion == "rmod_int_bpg" %}selected{% endif %}>int blank page </option>
+                                        <option value="rmod_int_bim" {% if modo_redireccion == "rmod_int_bim" %}selected{% endif %}>int blank image</option>
+                                        <option value="rmod_ext_err" {% if modo_redireccion == "rmod_ext_err" %}selected{% endif %}>ext url err page (enter URL)</option>
+                                        <option value="rmod_ext_rdr" {% if modo_redireccion == "rmod_ext_rdr" %}selected{% endif %}>ext url redirect (enter URL)</option>
+                                        <option value="rmod_ext_mov" {% if modo_redireccion == "rmod_ext_mov" %}selected{% endif %}>ext url move  (enter URL)</option>
+                                        <option value="rmod_ext_fnd" {% if modo_redireccion == "rmod_ext_fnd" %}selected{% endif %}>ext url found (enter URL)</option>
+                                    </select>
+                                    <small class="help-block">
+                                        If you use 'transparent proxy', then 'int' redirect mode will not accessible.<br>
+                                        Options:ext url err page , ext url redirect , ext url as 'move' , ext url as 'found'.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Redirect</label>
+                                     <textarea class="form-control" name="redireccion" id="redireccion" rows="2" placeholder="Writte the url list">{{ redireccion }}</textarea>
+                                    <small class="help-block">
+                                        Enter the external redirection URL, error message or size (bytes) here.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ descripcion }}" placeholder="Writte the name">
+                                    <small class="help-block">
+                                        You may enter any description here for your reference.
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Log</label>
+                                    <label>
+                                        <input type="hidden" name="log" value="">
+                                        <input type="checkbox" name="log" id="log" value="on" {% if log == "on" %}checked{% endif %}> Check this option to enable logging for this ACL.
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" name="guardar" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+{% include '@App/plantillas/fin.html.twig' %}

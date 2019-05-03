@@ -131,3 +131,25 @@ editar_aliases:
 eliminar_aliases:
     path:     /eliminar_aliases
     defaults: { _controller: AppBundle:aliases:eliminar_aliases }
+
+# Nat port forward #
+
+grupos_nat:
+    path:     /grupos_nat 
+    defaults: { _controller: AppBundle:nat:grupos_nat }
+
+registro_nat_port_forward:
+    path:     /registro_nat_port_forward
+    defaults: { _controller: AppBundle:nat:registro_nat_port_forward }
+
+lista_nat:
+    path:     /lista_nat 
+    defaults: { _controller: AppBundle:nat:lista_nat }
+
+editar_nat_port_forward:
+    path:     /editar_nat_port_forward
+    defaults: { _controller: AppBundle:nat:editar_nat_port_forward }
+
+eliminar_nat_port_forward:
+    path:     /eliminar_nat_port_forward
+    defaults: { _controller: AppBundle:nat:eliminar_nat_port_forward }

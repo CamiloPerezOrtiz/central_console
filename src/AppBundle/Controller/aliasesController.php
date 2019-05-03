@@ -148,48 +148,70 @@ class aliasesController extends Controller
 
 	public function registro_aliasesAction()
 	{
-		$plantel=$_REQUEST['id'];
-		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($plantel);
-		$informacion_interfaces_nombre = $this->informacion_interfaces_nombre($plantel);
+		$grupo=$_REQUEST['id'];
+		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($grupo);
+		$informacion_interfaces_nombre = $this->informacion_interfaces_nombre($grupo);
 		if(isset($_POST['guardar']))
 		{
-			$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
-			$target_rule = implode(" ",$_POST['lista_target']);
-			$product = $xml->addChild('config');
-			$product->addChild('disabled', $_POST['estado']);
-			$product->addChild('name', $_POST['nombre']);
-			$product->addChild('source', $_POST['cliente']);
-			$product->addChild('time', "");
-			$product->addChild('dest', $target_rule." all [ all]");
-			$product->addChild('notallowingip', $_POST['not_ip']);
-			$product->addChild('redirect_mode', $_POST['modo_redireccion']);
-			$product->addChild('redirect', $_POST['redireccion']);
-			$product->addChild('safesearch', "on");
-			$product->addChild('rewrite', "");
-			$product->addChild('overrewrite', "");
-			$product->addChild('description', $_POST['descripcion']);
-			$product->addChild('enablelog', $_POST['log']);
-			file_put_contents("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", $xml->asXML());
-
-			$contenido = "\t<aliases>\n";
-			foreach($xml->alias as $alias)
+			$nombre_interfas = $_POST['nombre_interfas'];
+			$nombre = $_POST['nombre'];
+			$descripcion = $_POST['descripcion'];
+			$tipo = $_POST['tipo'];
+			$descripcion_ip_port = implode(" ||",$_POST['descripcion_ip_port']);
+			# Consulta para obtener la ip de la interfaz selecionada #
+			foreach($_POST['plantel'] as $plantel_grupo)
 			{
-			    $contenido .= "\t\t<alias>\n";
-			    $contenido .= "\t\t\t<name>" . $alias->name . "</name>\n";
-			    $contenido .= "\t\t\t<type>" . $alias->type . "</type>\n";
-			    $contenido .= "\t\t\t<address>" . $alias->address . "</address>\n";
-			    $contenido .= "\t\t\t<descr>" . $alias->descr . "</descr>\n";
-			    $contenido .= "\t\t\t<detail>" . $alias->detail . "</detail>\n";
-			    $contenido .= "\t\t</alias>\n";
+				$xml = simplexml_load_file("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml");
+				$informacion_interfaces_ip = $this->informacion_interfaces_ip($nombre_interfas, $plantel_grupo);
+				# Crear archivo temporal de las IPs #
+				$archivo_ip=fopen("$grupo-archivo_ip.txt","w") or die("Problemas con el servidor intente mas tarde.");
+				foreach ($informacion_interfaces_ip as $obtener_ip_interfas) 
+				{
+					foreach ($obtener_ip_interfas as $ip_interfas) 
+					{
+						foreach ($_POST['ip_port'] as $octeto_ip)
+						{
+							$ip_completa = $ip_interfas . $octeto_ip . " ";
+							# Guardar IP completa en el archivo temporal #
+							fputs($archivo_ip,$ip_completa);
+						}
+						# Formato para la lectura del archivo temporal #
+						fputs($archivo_ip,"|"."\n");
+						$delimitador=file("$grupo-archivo_ip.txt");
+						foreach($delimitador as $dem)
+						{
+							list($ip_interfas) = explode('|', $dem);
+						}
+						$formato_delimitador = trim($ip_interfas, " |");
+						$product = $xml->addChild('alias');
+						$product->addChild('name', $nombre);
+						$product->addChild('type', $tipo);
+						$product->addChild('address', $formato_delimitador);
+						$product->addChild('descr', $descripcion);
+						$product->addChild('detail', $descripcion_ip_port);
+						file_put_contents("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml", $xml->asXML());
+					}
+				}
+				$contenido = "\t<aliases>\n";
+				foreach($xml->alias as $alias)
+				{
+				    $contenido .= "\t\t<alias>\n";
+				    $contenido .= "\t\t\t<name>" . $alias->name . "</name>\n";
+				    $contenido .= "\t\t\t<type>" . $alias->type . "</type>\n";
+				    $contenido .= "\t\t\t<address>" . $alias->address . "</address>\n";
+				    $contenido .= "\t\t\t<descr>" . $alias->descr . "</descr>\n";
+				    $contenido .= "\t\t\t<detail>" . $alias->detail . "</detail>\n";
+				    $contenido .= "\t\t</alias>\n";
+				}
+			    $contenido .= "\t</aliases>";
+				$archivo = fopen("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml", 'w');
+				fwrite($archivo, $contenido);
+				fclose($archivo);
 			}
-		    $contenido .= "\t</aliases>";
-			$archivo = fopen("clients/Ejemplo_2/$plantel/info_aliases.xml", 'w');
-			fwrite($archivo, $contenido);
-			fclose($archivo);
-			return $this->redirectToRoute("grupos_acl");
+			unlink("$grupo-archivo_ip.txt");
+			return $this->redirectToRoute("grupos_aliases");
 		}
 		return $this->render('@App/aliases/registro_aliases.html.twig', array(
-			'plantel'=>$plantel,
 			'informacion_interfaces_plantel'=>$informacion_interfaces_plantel,
 			'informacion_interfaces_nombre'=>$informacion_interfaces_nombre,
 		));
@@ -234,6 +256,18 @@ class aliasesController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 	    $db = $em->getConnection();
 		$query = "SELECT DISTINCT nombre FROM interfaces WHERE grupo = '$grupo'";
+		$stmt = $db->prepare($query);
+		$params =array();
+		$stmt->execute($params);
+		$grupos=$stmt->fetchAll();
+		return $grupos;
+	}
+	# Funcion utilizada en registro_aliases #
+	private function informacion_interfaces_ip($nombre, $plantel)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+	    $db = $em->getConnection();
+		$query = "SELECT DISTINCT ip FROM interfaces WHERE nombre = '$nombre' AND descripcion = '$plantel'";
 		$stmt = $db->prepare($query);
 		$params =array();
 		$stmt->execute($params);

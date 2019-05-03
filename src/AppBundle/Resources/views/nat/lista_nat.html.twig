@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            List groups ACL campus {{ubicacion}}
+            List nat {{ubicacion}}
         </h1>
     </section>
     <section class="content">
@@ -11,12 +11,12 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
-                            <a href="{{ path('registro_aliases',{'id': app.user.grupo }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
+                            <a href="{{ path('registro_acl',{'id': ubicacion }) }}" class="btn btn-success btn-flat">Add nat port forward</a>
                         {% endif %} 
                     </div>
                     <div class="box-body">
                         <div class="box-body table-responsive no-padding">
-                            <table id="example1" class="table table-bordered table-hover">
+                            <table id="example1" class="table table-bordered table-hover text-center">
                                 <div class="col-md-12">
                                     {% for msg in app.session.flashbag().get('estatus') %}
                                         <div class="alert alert-info" aria-label="Close">
@@ -27,8 +27,15 @@
                                 </div>
                                 <thead>
                                     <tr>
-                                        <th>Name</th> 
-                                        <th>Values</th>
+                                        <th>Disabled</th>
+                                        <th>Interface</th> 
+                                        <th>Protocol</th>
+                                        <th>Source Address</th>
+                                        <th>Source Ports</th>
+                                        <th>Dest. Address</th>
+                                        <th>Dest. Ports</th>
+                                        <th>NAT IP</th>
+                                        <th>NAT Ports</th>
                                         <th>Description</th>
                                         {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
                                             <th>Edit</th>
@@ -39,19 +46,28 @@
                                 <tbody>
                                     {% for item in xmls %}
                                         <tr>
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.address }}</td>
+                                            <td><input type="checkbox" name="item_index[]"></td>
+                                            <td>{{ item.interface }}</td>
+                                            <td>{{ item.protocol }}</td>
+                                            <td>*</td>
+                                            <td>*</td>
+                                            <td>
+                                                {{ item.destination.network }} 
+                                            </td>
+                                            <td>{{ item.destination.port }}</td>
+                                            <td>{{ item.target }}</td>
+                                            <td>*</td>
                                             <td>{{ item.descr }}</td>
                                             {% if app.user.role == 'ROLE_SUPERUSER' or app.user.role == 'ROLE_ADMINISTRATOR' %}
                                                 <td>
-                                                    <form method="post" action="{{ path('editar_aliases') }}">
+                                                    <form method="post" action="{{ path('editar_acl') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
                                                         <button class="btn btn-warning btn-xs" type="submit">Edit <i class="fa fa-edit"></i></button>
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <form method="post" action="{{ path('eliminar_aliases') }}">
+                                                    <form method="post" action="{{ path('eliminar_acl') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
                                                         <button class="btn btn-danger btn-xs" type="submit">Delete <i class="fa fa-remove"></i></button>
