@@ -153,3 +153,25 @@ editar_nat_port_forward:
 eliminar_nat_port_forward:
     path:     /eliminar_nat_port_forward
     defaults: { _controller: AppBundle:nat:eliminar_nat_port_forward }
+
+# Nat port forward #
+
+grupos_firewall:
+    path:     /grupos_firewall 
+    defaults: { _controller: AppBundle:firewall:grupos_firewall }
+
+registro_firewall:
+    path:     /registro_firewall
+    defaults: { _controller: AppBundle:firewall:registro_firewall }
+
+lista_firewall:
+    path:     /lista_firewall 
+    defaults: { _controller: AppBundle:firewall:lista_firewall }
+
+editar_nat:
+    path:     /editar_nat
+    defaults: { _controller: AppBundle:nat:editar_nat }
+
+eliminar_nat:
+    path:     /eliminar_nat
+    defaults: { _controller: AppBundle:nat:eliminar_nat }

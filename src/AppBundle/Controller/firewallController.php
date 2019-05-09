@@ -4,21 +4,10 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
-class aclController extends Controller
+class firewallController extends Controller
 {
-	# Variables #
-	private $session; 
-
-	# Constructor # 
-	public function __construct()
-	{
-		$this->session = new Session();
-	}
-
-	public function grupos_aclAction()
+	public function grupos_firewallAction()
 	{
 		$u = $this->getUser();
 		if($u != null)
@@ -28,17 +17,19 @@ class aclController extends Controller
 	        if($role == "ROLE_SUPERUSER")
 	        {
 	        	$grupos = $this->obtener_grupo_nombre();
-				return $this->render("@App/acl/grupos_acl.html.twig", array(
+				return $this->render("@App/firewall/grupos_firewall.html.twig", array(
 					"grupo"=>$grupos
 				));
 	        }
 	        if($role == "ROLE_ADMINISTRATOR" or $role == "ROLE_USER")
-	        	return $this->redirectToRoute("lista_acl");
+	        	return $this->redirectToRoute("lista_firewall");
 	    }
 	}
 
-	public function lista_aclAction()
+	public function lista_firewallAction()
 	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$db = $em->getConnection();
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
@@ -49,10 +40,12 @@ class aclController extends Controller
 		if(isset($_POST['solicitar']))
 		{
 			$ubicacion = $_POST['ubicacion'];
-			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_squidguardacl.xml");
-			return $this->render('@App/acl/lista_acl.html.twig', array(
+			$obtener_nombre_interfas = $this->obtener_nombre_interfas($ubicacion);
+			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_filter.xml");
+			return $this->render('@App/firewall/lista_firewall.html.twig', array(
 				'ubicacion'=>$ubicacion,
-				'xmls'=>$xmls= $xml->config
+				'obtener_nombre_interfas'=>$obtener_nombre_interfas,
+				'xmls'=>$xml->rule
 			));
 		}
 	    return $this->render('@App/plantillas/solicitud_grupo.html.twig', array(
@@ -62,20 +55,11 @@ class aclController extends Controller
 
 	public function editar_aclAction()
 	{
-		$u = $this->getUser();
-		$role=$u->getRole();
-		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
-		else
-			$grupo=$u->getGrupo();
 		$plantel=$_POST['plantel'];
-		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguardacl.xml");
-		$xml2 = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
+		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
+		$xml2 = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
-			$lista_target = array_diff($_POST['lista_target'], array('none'));
-			$nueva_lista_target = implode(" ",$lista_target);
-			$nueva_lista_target;
 			foreach($xml->config as $config)
 			{
 				if($config->name==$_POST['nombre'])
@@ -84,7 +68,7 @@ class aclController extends Controller
 					$config->name = $_POST['nombre'];
 					$config->source = $_POST['cliente'];
 					$config->time = "";
-					$config->dest = $nueva_lista_target . " all [ all]";
+					$config->dest = $_POST['target_rule'];
 					$config->notallowingip = $_POST['not_ip'];
 					$config->redirect_mode = $_POST['modo_redireccion'];
 					$config->redirect = $_POST['redireccion'];
@@ -95,7 +79,7 @@ class aclController extends Controller
 					$config->enablelog = $_POST['log'];
 				}
 			}
-			$xml->asXML("clients/$grupo/$plantel/info_squidguardacl.xml");
+			$xml->asXML("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
 			$contenido = "\t\t<squidguardacl>\n";
 			foreach($xml->config as $config)
 			{
@@ -116,7 +100,7 @@ class aclController extends Controller
 			    $contenido .= "\t\t\t</config>\n";
 			}
 		    $contenido .= "\t\t</squidguardacl>";
-			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
+			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
 			return $this->redirectToRoute("grupos_acl");
@@ -150,22 +134,15 @@ class aclController extends Controller
 			"redireccion"=>$redireccion,
 			"descripcion"=>$descripcion,
 			"log"=>$log,
-			'xmls'=>$xmls= $xml2->config,
-			"lista_negra"=>$lista_negra = file("blacklist.txt")
+			'xmls'=>$xmls= $xml2->config
 		));
 	}
 
 	public function eliminar_aclAction()
 	{
-		$u = $this->getUser();
-		$role=$u->getRole();
-		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
-		else
-			$grupo=$u->getGrupo();
 		$plantel=$_POST['plantel'];
 		$libreria_dom = new \DOMDocument; 
-	    $libreria_dom->load("clients/$grupo/$plantel/info_squidguardacl.xml");
+	    $libreria_dom->load("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
 	    $squidguarddest = $libreria_dom->documentElement;
 	    $config = $squidguarddest->getElementsByTagName('config');
 	    foreach ($config as $nodo) 
@@ -175,8 +152,8 @@ class aclController extends Controller
 	        if($valor == $_POST['valor'])
 	            $squidguarddest->removeChild($nodo);
 	    }
-	    $libreria_dom->save("clients/$grupo/$plantel/info_squidguardacl.xml");
-	    $xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguardacl.xml");
+	    $libreria_dom->save("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
+	    $xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
 		$contenido = "\t\t<squidguardacl>\n";
 		foreach($xml->config as $config)
 		{
@@ -197,35 +174,20 @@ class aclController extends Controller
 		    $contenido .= "\t\t\t</config>\n";
 		}
 	    $contenido .= "\t\t</squidguardacl>";
-		$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
+		$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
 		return $this->redirectToRoute("grupos_acl");
 	}	
 
-	public function registro_aclAction(Request $request)
+	public function registro_firewallAction()
 	{
-		$u = $this->getUser();
-		$role=$u->getRole();
-		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
-		else
-			$grupo=$u->getGrupo();
 		$plantel=$_REQUEST['id'];
-		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
+		$obtener_nombre_interfas = $this->obtener_nombre_interfas($plantel);
+		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
-			$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguardacl.xml");
-			foreach($xml->config as $config)
-			{
-				if($config->name==$_POST['nombre'])
-				{
-					$estatus="The name that you try to register already exists in ".$plantel.".";
-				$this->session->getFlashBag()->add("estatus",$estatus);
-				return $this->redirectToRoute("grupos_acl");
-
-				}
-			}
+			$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
 			$target_rule = implode(" ",$_POST['lista_target']);
 			$product = $xml->addChild('config');
 			$product->addChild('disabled', $_POST['estado']);
@@ -241,7 +203,7 @@ class aclController extends Controller
 			$product->addChild('overrewrite', "");
 			$product->addChild('description', $_POST['descripcion']);
 			$product->addChild('enablelog', $_POST['log']);
-			file_put_contents("clients/$grupo/$plantel/info_squidguardacl.xml", $xml->asXML());
+			file_put_contents("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", $xml->asXML());
 			$contenido = "\t\t<squidguardacl>\n";
 			foreach($xml->config as $config)
 			{
@@ -262,15 +224,15 @@ class aclController extends Controller
 			    $contenido .= "\t\t\t</config>\n";
 			}
 		    $contenido .= "\t\t</squidguardacl>";
-			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
+			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
 			return $this->redirectToRoute("grupos_acl");
 		}
-		return $this->render('@App/acl/registro_acl.html.twig', array(
+		return $this->render('@App/firewall/registro_firewall.html.twig', array(
 			'plantel'=>$plantel,
-			'xmls'=>$xmls= $xml->config,
-			"lista_negra"=>$lista_negra = file("blacklist.txt")
+			'obtener_nombre_interfas'=>$obtener_nombre_interfas,
+			'xmls'=>$xmls= $xml->config
 		));
 	}
 
@@ -301,6 +263,17 @@ class aclController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 	    $db = $em->getConnection();
 		$query = "SELECT DISTINCT descripcion FROM interfaces WHERE grupo = '$grupo'";
+		$stmt = $db->prepare($query);
+		$params =array();
+		$stmt->execute($params);
+		$grupos=$stmt->fetchAll();
+		return $grupos;
+	}
+	private function obtener_nombre_interfas($descripcion)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+	    $db = $em->getConnection();
+		$query = "SELECT nombre, tipo FROM interfaces WHERE descripcion = '$descripcion'";
 		$stmt = $db->prepare($query);
 		$params =array();
 		$stmt->execute($params);

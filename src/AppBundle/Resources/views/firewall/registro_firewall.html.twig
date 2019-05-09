@@ -1,0 +1,642 @@
+{% include '@App/plantillas/cabecera.html.twig' %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Register firewall rule {{plantel}}
+        </h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Firewall rule</h3>
+                    </div>
+                    <form method="post">
+                        <input type="hidden" name="plantel" value="{{plantel}}">
+                        <div class="modal-body">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Register firewall <input type="hidden" name="ubicacion" value="{{plantel}}">
+                                            </div>
+                                            <div class="panel-body small">
+                                                <div class="form-row">
+                                                    <div class="form-group">  
+                                                        <label>Action</label><br>
+                                                        <small class="text-justify small">
+                                                            Choose what to do with packets that match the criteria specified below.
+                                                        </small><br>
+                                                        <small class="text-justify small">
+                                                            Hint: the difference between block and reject is that with reject, a packet (TCP RST or ICMP port unreachable for UDP) is returned to the sender, whereas with block the packet is dropped silently. In either case, the original packet is discarded.
+                                                        </small><br><br>
+                                                        <select class="form-control" name="action" id="action">
+                                                            <option value="pass">Pass</option>
+                                                            <option value="block">Block</option>
+                                                            <option value="reject">Reject</option>
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group"> 
+                                                        <label>Disabled</label>
+                                                        <input type="hidden" name="estatus" value="">
+                                                        <input type="checkbox" name="estatus" id="estatus" value="on">  <label>Disable this rule.</label><br>
+                                                        <small class="text-justify small">
+                                                            Set this option to disable this rule without removing it from the list.
+                                                        </small>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">   
+                                                        <label>Interface</label><br>
+                                                        <small class="text-justify small">
+                                                            Choose the interface from which packets must come to match this rule.
+                                                        </small><br><br>
+                                                        <select class="form-control" name="interface" id="interface">
+                                                            {% for interface in obtener_nombre_interfas %}
+                                                                    <option value="{{ interface.tipo }}">{{ interface.nombre }}</option> 
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">   
+                                                        <label>Address Family</label><br>
+                                                        <small class="text-justify small">
+                                                            Select the Internet Protocol version this rule applies to.
+                                                        </small><br><br>
+                                                        <select class="form-control" name="adress" id="adress">
+                                                            <option value="inet">IPv4</option>
+                                                            <option value="inet6">IPv6</option>
+                                                            <option value="inet46">IPv4+IPv6</option>
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">   
+                                                        <label>Protocol</label><br>
+                                                        <small class="text-justify small">
+                                                            Choose which IP protocol this rule should match.
+                                                        </small><br><br>
+                                                        <select class="form-control" name="protocolo" id="protocolo" onchange="protocoloOnChange(this.value);">
+                                                            <option value="any" selected>Any</option>
+                                                            <option value="tcp">TCP</option>
+                                                            <option value="udp">UDP</option>
+                                                            <option value="tcp/udp">TCP/UDP</option>
+                                                            <option value="icmp">ICMP</option>
+                                                        </select>
+                                                    </div>
+                                                    <div id="icmp_subtypes">
+                                                        <hr>
+                                                        <div class="form-group">
+                                                            <label>ICMP Subtypes</label><br>
+                                                            <small class="text-justify small">
+                                                                Choose which IP protocol this rule should match.
+                                                            </small><br><br>
+                                                            <select class="form-control input-sm" name="icmp_subtypes[]" multiple="multiple">
+                                                                <option value="any" selected>any</option>
+                                                                <option value="althost">Alternate Host</option>
+                                                                <option value="dataconv">Datagram conversion error</option>
+                                                                <option value="echorep">Echo reply</option>
+                                                                <option value="echoreq">Echo request</option>
+                                                                <option value="inforep">Information reply</option>
+                                                                <option value="inforeq">Information request</option>
+                                                                <option value="ipv6-here">IPv6 I-am-here</option>
+                                                                <option value="ipv6-where">IPv6 where-are-you</option>
+                                                                <option value="maskrep">Address mask reply</option>
+                                                                <option value="maskreq">Address mask request</option>
+                                                                <option value="mobredir">Mobile host redirect</option>
+                                                                <option value="mobregrep">Mobile registration reply</option>
+                                                                <option value="mobregreq">Mobile registration request</option>
+                                                                <option value="paramprob">Parameter problem (invalid IP header)</option>
+                                                                <option value="photuris">Photuris</option>
+                                                                <option value="redir">Redirect</option>
+                                                                <option value="routeradv">Router advertisement</option>
+                                                                <option value="routersol">Router solicitation</option>
+                                                                <option value="skip">SKIP</option>
+                                                                <option value="squench">Source quench</option>
+                                                                <option value="timerep">Timestamp reply</option>
+                                                                <option value="timereq">Timestamp</option>
+                                                                <option value="timex">Time exceeded</option>
+                                                                <option value="trace">Traceroute</option>
+                                                                <option value="unreach">Destination unreachable</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Source
+                                            </div>
+                                            <div class="panel-body small">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3">Source
+                                                        <input type="hidden" name="sourceInvertMatch" value="">
+                                                        <input type="checkbox" name="sourceInvertMatch" id="sourceInvertMatch" value="on"><br><small>Invert match.</small>
+                                                    </label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control input-sm" id="sourceAdvancedType" name="sourceAdvancedType">
+                                                            <option value="any" selected>Any</option>
+                                                            <option value="single">Single host or alias</option>
+                                                            <option value="network">Network</option>
+                                                            <option value="pppoe">PPPoE clients</option>
+                                                            <option value="l2tp">L2TP clients</option>
+                                                            {% for interface in obtener_nombre_interfas %}
+                                                                <option value="{{ interface.tipo }}">{{ interface.nombre }} net</option>
+                                                                <option value="{{ interface.tipo }}ip">{{ interface.nombre }} address</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <span class="help-block">Type</span>
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <div class="input-group">
+                                                            <input class="form-control" type="text" name="sourceAddresMask" id="sourceAddresMask">
+                                                            <span class="input-group-addon input-group-inbetween pfIpMask">/</span>
+                                                            <select class="form-control" name="sourceAdvancedAdressMask1" id="mask">
+                                                                {% for i in 32..1 %}
+                                                                    <option>{{ i }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div id="display_advanced">
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <small class="text-justify small">
+                                                            The Source Port Range for a connection is typically random and almost never equal to the destination port. In most cases this setting must remain at its default value, any.
+                                                        </small><br><br>
+                                                        <a style='cursor: pointer;' onClick="hide_advanced('source_port_range')"class="btn btn-primary btn-sm boton_mostrar">
+                                                            Hide advanced <i class="fa fa-cog icon-embed-btn"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div id="source_port_range">
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Source Port Range</label><br>
+                                                        <small class="text-justify small">
+                                                            Specify the source port or port range for this rule. The "To" field may be left empty if only filtering a single port.
+                                                        </small><br><br>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" name="sourcePortRangeFrom" id="sourcePortRangeFrom">
+                                                                <option value="" selected>(other)</option><option value="any">any</option><option value="5999">CVSup (5999)</option><option value="53">DNS (53)</option><option value="21">FTP (21)</option><option value="3000">HBCI (3000)</option><option value="80">HTTP (80)</option><option value="443">HTTPS (443)</option><option value="5190">ICQ (5190)</option><option value="113">IDENT/AUTH (113)</option><option value="143">IMAP (143)</option><option value="993">IMAP/S (993)</option><option value="4500">IPsec NAT-T (4500)</option><option value="500">ISAKMP (500)</option><option value="1701">L2TP (1701)</option><option value="389">LDAP (389)</option><option value="1755">MMS/TCP (1755)</option><option value="7000">MMS/UDP (7000)</option><option value="445">MS DS (445)</option><option value="3389">MS RDP (3389)</option><option value="1512">MS WINS (1512)</option><option value="1863">MSN (1863)</option><option value="119">NNTP (119)</option><option value="123">NTP (123)</option><option value="138">NetBIOS-DGM (138)</option><option value="137">NetBIOS-NS (137)</option><option value="139">NetBIOS-SSN (139)</option><option value="1194">OpenVPN (1194)</option><option value="110">POP3 (110)</option><option value="995">POP3/S (995)</option><option value="1723">PPTP (1723)</option><option value="1812">RADIUS (1812)</option><option value="1813">RADIUS accounting (1813)</option><option value="5004">RTP (5004)</option><option value="5060">SIP (5060)</option><option value="25">SMTP (25)</option><option value="465">SMTP/S (465)</option><option value="161">SNMP (161)</option><option value="162">SNMP-Trap (162)</option><option value="22">SSH (22)</option><option value="3478">STUN (3478)</option><option value="587">SUBMISSION (587)</option><option value="3544">Teredo (3544)</option><option value="23">Telnet (23)</option><option value="69">TFTP (69)</option><option value="5900">VNC (5900)</option>
+                                                            </select>
+                                                            <span class="help-block">From</span>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" type="text" name="sourcePortRangeCustom" id="sourcePortRangeCustom">
+                                                            <span class="help-block">Custom</span>
+                                                        </div>  
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" name="sourcePortRangeTo" id="sourcePortRangeTo">
+                                                               <option value="" selected>(other)</option><option value="any">any</option><option value="5999">CVSup (5999)</option><option value="53">DNS (53)</option><option value="21">FTP (21)</option><option value="3000">HBCI (3000)</option><option value="80">HTTP (80)</option><option value="443">HTTPS (443)</option><option value="5190">ICQ (5190)</option><option value="113">IDENT/AUTH (113)</option><option value="143">IMAP (143)</option><option value="993">IMAP/S (993)</option><option value="4500">IPsec NAT-T (4500)</option><option value="500">ISAKMP (500)</option><option value="1701">L2TP (1701)</option><option value="389">LDAP (389)</option><option value="1755">MMS/TCP (1755)</option><option value="7000">MMS/UDP (7000)</option><option value="445">MS DS (445)</option><option value="3389">MS RDP (3389)</option><option value="1512">MS WINS (1512)</option><option value="1863">MSN (1863)</option><option value="119">NNTP (119)</option><option value="123">NTP (123)</option><option value="138">NetBIOS-DGM (138)</option><option value="137">NetBIOS-NS (137)</option><option value="139">NetBIOS-SSN (139)</option><option value="1194">OpenVPN (1194)</option><option value="110">POP3 (110)</option><option value="995">POP3/S (995)</option><option value="1723">PPTP (1723)</option><option value="1812">RADIUS (1812)</option><option value="1813">RADIUS accounting (1813)</option><option value="5004">RTP (5004)</option><option value="5060">SIP (5060)</option><option value="25">SMTP (25)</option><option value="465">SMTP/S (465)</option><option value="161">SNMP (161)</option><option value="162">SNMP-Trap (162)</option><option value="22">SSH (22)</option><option value="3478">STUN (3478)</option><option value="587">SUBMISSION (587)</option><option value="3544">Teredo (3544)</option><option value="23">Telnet (23)</option><option value="69">TFTP (69)</option><option value="5900">VNC (5900)</option>
+                                                           </select>
+                                                            <span class="help-block">To</span>
+                                                        </div>  
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" type="text" name="sourcePortRangeCustomTo" id="sourcePortRangeCustomTo">
+                                                            <span class="help-block">Custom</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Destination
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3">Destination
+                                                        <input type="hidden" name="destinationInvertMatch" value="">
+                                                        <input type="checkbox" name="destinationInvertMatch" id="destinationInvertMatch" value="on"> <br><small>Invert match.</small>
+                                                    </label>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">   
+                                                            <select class="form-control input-sm" id="destinationType" name="destinationType">
+                                                                <option value="any" selected>Any</option>
+                                                                <option value="single">Single host or alias</option>
+                                                                <option value="network">Network</option>
+                                                                <option value="(self)">This firewall (self)</option>
+                                                                <option value="pppoe">PPPoE clients</option>
+                                                                <option value="l2tp">L2TP clients</option>
+                                                                {% for interface in obtener_nombre_interfas %}
+                                                                    <option value="{{ interface.tipo }}">{{ interface.nombre }} net</option>
+                                                                    <option value="{{ interface.tipo }}ip">{{ interface.nombre }} address</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <span class="help-block">Type</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <div class="input-group">
+                                                            <input class="form-control" type="text" name="destinationAddresMask" id="destinationAddresMask">
+                                                            <span class="input-group-addon input-group-inbetween pfIpMask">/</span>
+                                                            <select class="form-control" name="destinationAdressMask2" id="maskDestifirewall">
+                                                                {% for i in 32..1 %}
+                                                                    <option>{{ i }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div id="destination_port_range">
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Destination Port Range</label><br>
+                                                        <small class="text-justify small">
+                                                            Specify the destination port or port range for this rule. The "To" field may be left empty if only filtering a single port.
+                                                        </small><br><br>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" type="text" name="destinationPortRangeFrom" id="destinationPortRangeFrom">
+                                                            <span class="help-block">From</span>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" name="destinationPortRangeCustom" id="destinationPortRangeCustom">
+                                                                {% for i in 32..1 %}
+                                                                    <option>{{ i }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <span class="help-block">Custom</span>
+                                                        </div>  
+                                                        <div class="col-sm-3">
+                                                            <input class="text" type="text" name="destinationPortRangeTo" id="destinationPortRangeTo">
+                                                            <span class="help-block">To</span>
+                                                        </div>  
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" name="destinationPortRangeCustomTo" id="destinationPortRangeCustomTo">
+                                                                {% for i in 32..1 %}
+                                                                    <option>{{ i }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <span class="help-block">Custom</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Extra Options
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <label>Disabled</label>
+                                                    <input type="hidden" name="log" value="">
+                                                    <input type="checkbox" name="log" id="log" value="on">
+                                                    <small class="text-justify small">
+                                                        Log packets that are handled by this rule.
+                                                    </small> <br>
+                                                    <small class="text-justify small">
+                                                        Hint: the firewall has limited local log space. Don't turn on logging for everything. If doing a lot of logging, consider using a remote syslog server (see the Status: System Logs: Settings page).
+                                                    </small>
+                                                </div>
+                                                <hr>
+                                                <div class="form-group">
+                                                    <label>Description</label><br>
+                                                    <small class="text-justify small">
+                                                        A description may be entered here for administrative reference. A maximum of 52 characters will be used in the ruleset and displayed in the firewall log.
+                                                    </small><br><br>
+                                                    <input class="form-control" type="text" name="descripcion" id="descripcion">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <!--
+                                <button type="submit" name="guardar" class="btn btn-primary">Save</button>
+                            -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% include '@App/plantillas/pie_pagina.html.twig' %}
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<script type="text/javascript">
+    //Funcion para el campo protocolo.
+    $(function() 
+    {
+        $("#protocolo").on('change', function() 
+        {
+            var selectValue = $(this).val();
+            switch (selectValue) 
+            {
+                case "any":
+                    $("#display_advanced").hide();
+                    $("#source_port_range").hide();
+                    $("#destination_port_range").hide();
+                    $("#icmp_subtypes").hide();
+                break;
+                case "tcp":
+                    $("#display_advanced").show();
+                    $("#source_port_range").show();
+                    $("#destination_port_range").show();
+                    $("#icmp_subtypes").hide();
+                break;
+                case "udp":
+                    $("#display_advanced").show();
+                    $("#source_port_range").show();
+                    $("#destination_port_range").show();
+                    $("#icmp_subtypes").hide();
+                break;
+                case "tcp/udp":
+                    $("#display_advanced").show();
+                    $("#source_port_range").show();
+                    $("#destination_port_range").show();
+                    $("#icmp_subtypes").hide();
+                break;
+                case "icmp":
+                    $("#display_advanced").hide();
+                    $("#source_port_range").hide();
+                    $("#destination_port_range").hide();
+                    $("#icmp_subtypes").show();
+                break;
+            }
+        }).change();
+    });
+    // Boton display_advanced
+    function hide_advanced(id)
+    {
+        if (document.getElementById)
+        {
+            var el = document.getElementById(id);
+            el.style.display = (el.style.display == "none") ? "block" : "none";
+        }
+    }
+    window.onload = function()
+    {
+        hide_advanced("source_port_range");
+    };
+    // Source
+    $(function() 
+    {
+        $("#sourceAdvancedType").on('change', function() 
+        {
+            var selectValue = $(this).val();
+            switch (selectValue) 
+            {
+                case "any":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();                
+                break;
+                case "single":
+                    $("#sourceAddresMask").show();
+                    $("#mask").hide();
+                break;
+                case "network":
+                    $("#sourceAddresMask").show();
+                    $("#mask").show();
+                break;
+                case "pppoe":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "l2tp":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "wan":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "wanip":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "lan":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "lanip":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt1":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt1ip":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt2":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt2ip":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt3":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+                case "opt3ip":
+                    $("#sourceAddresMask").hide();
+                    $("#mask").hide();
+                break;
+            }
+        }).change();
+    }); 
+    // Fin
+    // Source hide advance
+    $( function() 
+        {
+            $("#sourcePortRangeFrom").change( function() 
+            {
+                if ($(this).val() === "") {
+                    $("#sourcePortRangeCustom").prop("readonly", false);
+                } 
+                else 
+                {
+                    $("#sourcePortRangeCustom").prop("readonly", true);
+                }
+            });
+        });
+
+        $('#sourcePortRangeFrom').on('change', function() 
+        {
+            $('#sourcePortRangeTo').val(this.value).prop('selected', true);
+            if($("#sourcePortRangeTo option:selected").val() == "") 
+            {
+                $("#sourcePortRangeCustomTo").prop("readonly", false);
+            }
+            else
+            {
+                $("#sourcePortRangeCustomTo").prop("readonly", true);
+            }
+        });
+
+        if($("#sourcePortRangeFrom option:selected").val() !== "") 
+        {
+           $("#sourcePortRangeCustom").prop("readonly", true);
+        }
+
+        $( function() 
+        {
+            $("#sourcePortRangeTo").change( function() 
+            {
+                if ($(this).val() === "") 
+                {
+                    $("#sourcePortRangeCustomTo").prop("readonly", false);
+                } 
+                else 
+                {
+                    $("#sourcePortRangeCustomTo").prop("readonly", true);
+                }
+            });
+        });
+        if($("#sourcePortRangeTo option:selected").val() !== "") 
+        {
+           $("#sourcePortRangeCustomTo").prop("readonly", true);
+        }
+    // Fin
+    // Destination
+    $(function() 
+    {
+        $("#destinationType").on('change', function() 
+        {
+            var selectValue = $(this).val();
+            switch (selectValue) 
+            {
+                case "any":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();                
+                break;
+                case "single":
+                    $("#destinationAddresMask").show();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "network":
+                    $("#destinationAddresMask").show();
+                    $("#maskDestifirewall").show();
+                break;
+                case "pppoe":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "l2tp":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "wan":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "wanip":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "lan":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "lanip":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt1":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt1ip":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt2":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt2ip":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt3":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+                case "opt3ip":
+                    $("#destinationAddresMask").hide();
+                    $("#maskDestifirewall").hide();
+                break;
+            }
+        }).change();
+    }); 
+    // Fin
+    // Source hide advance
+    $( function() 
+        {
+            $("#destinationPortRangeFrom").change( function() 
+            {
+                if ($(this).val() === "") {
+                    $("#destinationPortRangeCustom").prop("readonly", false);
+                } 
+                else 
+                {
+                    $("#destinationPortRangeCustom").prop("readonly", true);
+                }
+            });
+        });
+
+        $('#destinationPortRangeFrom').on('change', function() 
+        {
+            $('#destinationPortRangeTo').val(this.value).prop('selected', true);
+            if($("#destinationPortRangeTo option:selected").val() == "") 
+            {
+                $("#destinationPortRangeCustomTo").prop("readonly", false);
+            }
+            else
+            {
+                $("#destinationPortRangeCustomTo").prop("readonly", true);
+            }
+        });
+
+        if($("#destinationPortRangeFrom option:selected").val() !== "") 
+        {
+           $("#destinationPortRangeCustom").prop("readonly", true);
+        }
+
+        $( function() 
+        {
+            $("#destinationPortRangeTo").change( function() 
+            {
+                if ($(this).val() === "") 
+                {
+                    $("#destinationPortRangeCustomTo").prop("readonly", false);
+                } 
+                else 
+                {
+                    $("#destinationPortRangeCustomTo").prop("readonly", true);
+                }
+            });
+        });
+        if($("#destinationPortRangeTo option:selected").val() !== "") 
+        {
+           $("#destinationPortRangeCustomTo").prop("readonly", true);
+        }
+    // Fin
+</script>
+{% include '@App/plantillas/fin.html.twig' %}

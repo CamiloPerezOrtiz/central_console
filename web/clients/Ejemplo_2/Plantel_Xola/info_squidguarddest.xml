@@ -1,15 +1,5 @@
 		<squidguarddest>
 			<config>
-				<name>blackall</name>
-				<domains></domains>
-				<urls></urls>
-				<expressions>|muycerdas+|muycerdas.xxx+|</expressions>
-				<redirect_mode>rmod_none</redirect_mode>
-				<redirect></redirect>
-				<description></description>
-				<enablelog>on</enablelog>
-			</config>
-			<config>
 				<name>blackwifi</name>
 				<domains></domains>
 				<urls></urls>
@@ -24,16 +14,6 @@
 				<domains></domains>
 				<urls></urls>
 				<expressions></expressions>
-				<redirect_mode>rmod_none</redirect_mode>
-				<redirect></redirect>
-				<description></description>
-				<enablelog>on</enablelog>
-			</config>
-			<config>
-				<name>blackadmon</name>
-				<domains>locals.sex www.pornoperra.com</domains>
-				<urls>locals.sex/ www.pornoperra.com/</urls>
-				<expressions>(^|[-\?+=/_])(adultsight|videoscalientes|putas?|verga?|adult?|redtube|youporn|xnxx|adultsite|adultsonly|adultweb|anal|analdildo|analpluck|babes?|beastiality|bestiality|pornsites?|bitch?|blowjob|bondage|boobs?|bukake?|bucake?|bumsen|busty?|camsex|chicks?|childporn|cock?|cumming|cumshot|cunt|cunts|dickhead|dildo|erotic?|erotik|fisting|freeporn|fuck?|funsex|teen?|gays|hardporn|hardcore|hentai|hooter|horny|hot|incest?|inzest|kamasutra|kissing?|lesben|zorra?|locals|lesbians?|lesbisch|livesex|lolitas|muycerdas|ipornogratis|masturbation|mastrubation|milf?|nude?|pedofilia|pedophil|penis?|playboy|porn?|porndirectory|porno?|pornstar|pussy?|sex|sexxx|sexcams|sexdream|sexkontakte|cerdas?|puercas?|sexvideo|sexy?|pornoperra|slut|softporn|striptease|tits|videosex|drpornogratisx|xvideos?|bestgaypornsites?|drpornogratisx?|xxx+)([-\?+=/_]|$)</expressions>
 				<redirect_mode>rmod_none</redirect_mode>
 				<redirect></redirect>
 				<description></description>

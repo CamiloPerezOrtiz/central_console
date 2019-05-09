@@ -1,21 +1,6 @@
 		<squidguardacl>
 			<config>
 				<disabled></disabled>
-				<name>AdmonRestrict</name>
-				<source>10.3.0.99 10.3.0.98</source>
-				<time></time>
-				<dest>!blackall !blackadmon ^whiteadmon !BlockAdmon !blk_BL_anonvpn !blk_BL_porn all [ all]</dest>
-				<notallowingip></notallowingip>
-				<redirect_mode>rmod_none</redirect_mode>
-				<redirect></redirect>
-				<safesearch>on</safesearch>
-				<rewrite></rewrite>
-				<overrewrite></overrewrite>
-				<description></description>
-				<enablelog>on</enablelog>
-			</config>
-			<config>
-				<disabled></disabled>
 				<name>terminal</name>
 				<source>192.168.0.101</source>
 				<time></time>
@@ -73,5 +58,20 @@
 				<overrewrite></overrewrite>
 				<description></description>
 				<enablelog>on</enablelog>
+			</config>
+			<config>
+				<disabled></disabled>
+				<name>AdmonRestrict</name>
+				<source>fdgfdgfd</source>
+				<time></time>
+				<dest>         none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect>dfgdfgfd</redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog></enablelog>
 			</config>
 		</squidguardacl>

@@ -5,9 +5,19 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class targetController extends Controller
 {
+	# Variables #
+	private $session; 
+
+	# Constructor # 
+	public function __construct()
+	{
+		$this->session = new Session();
+	}
+
 	public function grupos_targetAction()
 	{
 		$u = $this->getUser();
@@ -29,8 +39,6 @@ class targetController extends Controller
 
 	public function lista_targetAction()
 	{
-		$em = $this->getDoctrine()->getEntityManager();
-		$db = $em->getConnection();
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
@@ -41,7 +49,7 @@ class targetController extends Controller
 		if(isset($_POST['solicitar']))
 		{
 			$ubicacion = $_POST['ubicacion'];
-			$xml = simplexml_load_file("clients/Ejemplo_2/$ubicacion/info_squidguarddest.xml");
+			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_squidguarddest.xml");
 			return $this->render('@App/target/lista_target.html.twig', array(
 				'ubicacion'=>$ubicacion,
 				'xmls'=>$xmls= $xml->config
@@ -55,7 +63,13 @@ class targetController extends Controller
 	public function editar_targetAction()
 	{
 		$plantel=$_POST['plantel'];
-		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_REQUEST['grupo'];
+		else
+			$grupo=$u->getGrupo();
+		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
 			foreach($xml->config as $config)
@@ -71,7 +85,7 @@ class targetController extends Controller
 					$config->enablelog = $_POST['log'];
 				}
 			}
-			$xml->asXML("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
+			$xml->asXML("clients/$grupo/$plantel/info_squidguarddest.xml");
 			$contenido = "\t\t<squidguarddest>\n";
 			foreach($xml->config as $config)
 			{
@@ -87,7 +101,7 @@ class targetController extends Controller
 			    $contenido .= "\t\t\t</config>\n";
 			}
 		    $contenido .= "\t\t</squidguarddest>";
-			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguarddest.xml", 'w');
+			$archivo = fopen("clients/$grupo/$plantel/info_squidguarddest.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
 			return $this->redirectToRoute("grupos_target");
@@ -123,8 +137,14 @@ class targetController extends Controller
 	public function eliminar_targetAction()
 	{
 		$plantel=$_POST['plantel'];
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_REQUEST['grupo'];
+		else
+			$grupo=$u->getGrupo();
 		$libreria_dom = new \DOMDocument; 
-	    $libreria_dom->load("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
+	    $libreria_dom->load("clients/$grupo/$plantel/info_squidguarddest.xml");
 	    $squidguarddest = $libreria_dom->documentElement;
 	    $config = $squidguarddest->getElementsByTagName('config');
 	    foreach ($config as $nodo) 
@@ -134,8 +154,8 @@ class targetController extends Controller
 	        if($valor == $_POST['valor'])
 	            $squidguarddest->removeChild($nodo);
 	    }
-	    $libreria_dom->save("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
-	    $xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
+	    $libreria_dom->save("clients/$grupo/$plantel/info_squidguarddest.xml");
+	    $xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
 		$contenido = "\t\t<squidguarddest>\n";
 		foreach($xml->config as $config)
 		{
@@ -151,7 +171,7 @@ class targetController extends Controller
 		    $contenido .= "\t\t\t</config>\n";
 		}
 	    $contenido .= "\t\t</squidguarddest>";
-		$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguarddest.xml", 'w');
+		$archivo = fopen("clients/$grupo/$plantel/info_squidguarddest.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
 		return $this->redirectToRoute("grupos_target");
@@ -160,12 +180,31 @@ class targetController extends Controller
 	public function registro_targetAction(Request $request)
 	{
 		$ubicacion=$_REQUEST['id'];
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_REQUEST['grupo'];
+		else
+			$grupo=$u->getGrupo();
 		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($ubicacion);
 		if(isset($_POST['guardar']))
 		{
 			foreach($_POST['plantel'] as $plantel_grupo)
 			{
-				$xml = simplexml_load_file("clients/Ejemplo_2/$plantel_grupo/info_squidguarddest.xml");
+				$xml = simplexml_load_file("clients/$grupo/$plantel_grupo/info_squidguarddest.xml");
+				foreach($xml->config as $config)
+				{
+					if($config->name==$_POST['nombre'])
+					{
+						$estatus="The name that you try to register already exists in ".$plantel_grupo.".";
+						$this->session->getFlashBag()->add("estatus",$estatus);
+						return $this->redirectToRoute("grupos_target");
+					}
+				}
+			}
+			foreach($_POST['plantel'] as $plantel_grupo)
+			{
+				$xml = simplexml_load_file("clients/$grupo/$plantel_grupo/info_squidguarddest.xml");
 				$product = $xml->addChild('config');
 				$product->addChild('name', $_POST['nombre']);
 				$product->addChild('domains', $_POST['lista_dominios']);
@@ -175,7 +214,7 @@ class targetController extends Controller
 				$product->addChild('redirect', $_POST['redireccion']);
 				$product->addChild('description', $_POST['descripcion']);
 				$product->addChild('enablelog', $_POST['log']);
-				file_put_contents("clients/Ejemplo_2/$plantel_grupo/info_squidguarddest.xml", $xml->asXML());
+				file_put_contents("clients/$grupo/$plantel_grupo/info_squidguarddest.xml", $xml->asXML());
 				$contenido = "\t\t<squidguarddest>\n";
 				foreach($xml->config as $config)
 				{
@@ -191,7 +230,7 @@ class targetController extends Controller
 				    $contenido .= "\t\t\t</config>\n";
 				}
 			    $contenido .= "\t\t</squidguarddest>";
-				$archivo = fopen("clients/Ejemplo_2/$plantel_grupo/info_squidguarddest.xml", 'w');
+				$archivo = fopen("clients/$grupo/$plantel_grupo/info_squidguarddest.xml", 'w');
 				fwrite($archivo, $contenido);
 				fclose($archivo);
 			}

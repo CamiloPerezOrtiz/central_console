@@ -79,4 +79,14 @@
 				<description></description>
 				<enablelog>on</enablelog>
 			</config>
+			<config>
+				<name>hola</name>
+				<domains>gdsfds</domains>
+				<urls>sdfds</urls>
+				<expressions>sdfds</expressions>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<description></description>
+				<enablelog>off</enablelog>
+			</config>
 		</squidguarddest>

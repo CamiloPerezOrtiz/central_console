@@ -60,16 +60,6 @@
 				<enablelog>on</enablelog>
 			</config>
 			<config>
-				<name>Prueba</name>
-				<domains>Prueba</domains>
-				<urls>Prueba</urls>
-				<expressions>Prueba</expressions>
-				<redirect_mode>rmod_int</redirect_mode>
-				<redirect>Prueba</redirect>
-				<description>Prueba</description>
-				<enablelog>on</enablelog>
-			</config>
-			<config>
 				<name>blackadmon</name>
 				<domains>facebook.com</domains>
 				<urls>facebook.com/</urls>

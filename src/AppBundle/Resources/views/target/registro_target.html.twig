@@ -39,14 +39,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Writte the name">
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Writte the name" required>
                                     <small class="help-block">
                                         Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9].
                                     </small>
                                 </div>
                                 <div class="form-group">
                                     <label>Domain List</label>
-                                    <textarea class="form-control" name="lista_dominios" id="lista_dominios" rows="3" placeholder="Writte the domain list"></textarea>
+                                    <textarea class="form-control" name="lista_dominios" id="lista_dominios" rows="3" placeholder="Writte the domain list" required></textarea>
                                     <small class="help-block">
                                         Enter destination domains or IP-addresses here. To separate them use space.<br>
                                         Example: mail.ru e-mail.ru yahoo.com 192.168.1.1
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>URL List</label>
-                                    <textarea class="form-control" name="lista_url" id="lista_url" rows="3" placeholder="Writte the url list"></textarea>
+                                    <textarea class="form-control" name="lista_url" id="lista_url" rows="3" placeholder="Writte the url list" required></textarea>
                                     <small class="help-block">
                                         Enter destination URLs here. To separate them use space.<br>
                                         Example: host.com/xxx 12.10.220.125/alisa
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Regular Expression</label>
-                                    <textarea class="form-control" name="expression_regular" id="expression_regular" rows="4" placeholder="Writte the regular expression"></textarea>
+                                    <textarea class="form-control" name="expression_regular" id="expression_regular" rows="4" placeholder="Writte the regular expression" required></textarea>
                                     <small class="help-block">
                                         Enter word fragments of the destination URL. To separate them use | . <br>
                                         Example: mail|casino|game|\.rsdf$
