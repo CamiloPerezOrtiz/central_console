@@ -1,0 +1,47 @@
+		<squidguardacl>
+			<config>
+				<disabled></disabled>
+				<name>Inalambrica</name>
+				<source>10.16.0.226 10.16.0.227</source>
+				<time></time>
+				<dest>!blackwifi ^whitewifi !blk_BL_aggressive !blk_BL_anonvpn !blk_BL_porn all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog>on</enablelog>
+			</config>
+			<config>
+				<disabled></disabled>
+				<name>Admin</name>
+				<source>10.16.0.0/24</source>
+				<time></time>
+				<dest>!blackadmon ^whiteadmon !blk_BL_aggressive !blk_BL_anonvpn !blk_BL_porn all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog>on</enablelog>
+			</config>
+			<config>
+				<disabled></disabled>
+				<name>Lab</name>
+				<source>192.168.16.0/24</source>
+				<time></time>
+				<dest>!blacklab ^whitelab !blk_BL_aggressive !blk_BL_anonvpn !blk_BL_porn all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog>on</enablelog>
+			</config>
+		</squidguardacl>

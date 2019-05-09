@@ -59,6 +59,9 @@ class aclController extends Controller
 		$xml2 = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
+			$lista_target = array_diff($_POST['lista_target'], array('none'));
+			$nueva_lista_target = implode(" ",$lista_target);
+			$nueva_lista_target;
 			foreach($xml->config as $config)
 			{
 				if($config->name==$_POST['nombre'])
@@ -67,7 +70,7 @@ class aclController extends Controller
 					$config->name = $_POST['nombre'];
 					$config->source = $_POST['cliente'];
 					$config->time = "";
-					$config->dest = $_POST['target_rule'];
+					$config->dest = $nueva_lista_target . " all [ all]";
 					$config->notallowingip = $_POST['not_ip'];
 					$config->redirect_mode = $_POST['modo_redireccion'];
 					$config->redirect = $_POST['redireccion'];
@@ -133,7 +136,8 @@ class aclController extends Controller
 			"redireccion"=>$redireccion,
 			"descripcion"=>$descripcion,
 			"log"=>$log,
-			'xmls'=>$xmls= $xml2->config
+			'xmls'=>$xmls= $xml2->config,
+			"lista_negra"=>$lista_negra = file("blacklist.txt")
 		));
 	}
 

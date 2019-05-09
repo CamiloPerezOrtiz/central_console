@@ -85,6 +85,34 @@
                                                     </td>
                                                 </tr>
                                             {% endfor %}
+                                            {% for lista in lista_negra %}
+                                                <tr>
+                                                    <td>
+                                                        [{{ lista|trim }}]
+                                                    </td>
+                                                    <td>access</td>
+                                                    <td>
+                                                        <select name="lista_target[]">
+                                                            <option value="none" >----</option>
+                                                            <option value="^{{ lista|trim }}" 
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "^"~lista|trim %} selected {% endif %}
+                                                                {% endfor %}>whitelist
+                                                            </option>
+                                                            <option value="!{{ lista|trim }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == "!"~lista|trim %} selected {% endif %}
+                                                                {% endfor %}>deny
+                                                            </option>
+                                                            <option value="{{ lista|trim }}"
+                                                                {% for target in lista_target %}
+                                                                    {% if target == lista|trim %} selected {% endif %}
+                                                                {% endfor %}>allow
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

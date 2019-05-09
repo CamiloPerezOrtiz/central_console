@@ -26,7 +26,7 @@ class gruposController extends Controller
 			{
 				foreach ($equipo_grupos as $equipo) 
 				{
-					$xml = simplexml_load_file("clients/Ejemplo_2/$equipo/info.xml");
+					$xml = simplexml_load_file("clients/$grupo/$equipo/info.xml");
 					foreach ($interfaces as $interfaces_equipo) 
 					{
 						$tipo_interfas = $xml->xpath("/interfaces/$interfaces_equipo/if");

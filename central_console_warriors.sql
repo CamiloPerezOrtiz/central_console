@@ -32,8 +32,8 @@ INSERT INTO usuarios VALUES(nextval('usuarios_id_seq'), 'admin', '', 'admin@warr
 CREATE TABLE grupos(
 	id INT PRIMARY KEY NOT NULL,
 	ip VARCHAR(15) NOT NULL,
-	grupo VARCHAR(50) NOT NULL,
-	plantel TEXT DEFAULT NULL
+	nombre VARCHAR(50) NOT NULL,
+	descripcion TEXT DEFAULT NULL
 );
 
 -- Interfaces
@@ -44,5 +44,5 @@ CREATE TABLE interfaces(
 	tipo VARCHAR(20) NOT NULL,
 	ip VARCHAR(50) NOT NULL,
 	grupo VARCHAR(50) NOT NULL,
-	plantel VARCHAR(50) NOT NULL
+	descripcion VARCHAR(50) NOT NULL
 );

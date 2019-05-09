@@ -3,8 +3,6 @@
 187.89.169.45|Kasa|Automotriz_Hyndai_Mundo_E|
 187.89.69.45|Kasa|Automotriz_Auto_sat_Tlanepantla|
 187.189.69.45|Kasa|Automotriz_Auto_sat_Insurgentes|
-187.89.69.45|Crista_facil|Metro_normal|
-187.189.69.45|Beneficia|Metro_Tlatelolco|
 38.124.169.166|UI|Plantel_Xola|
 38.123.201.106|UI|Plantel_Norte|
 170.0.14.186|UI|Plantel_Ermita|

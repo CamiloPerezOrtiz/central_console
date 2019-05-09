@@ -41,10 +41,6 @@ class natController extends Controller
 		{
 			$ubicacion = $_POST['ubicacion'];
 			$xml = simplexml_load_file("clients/Ejemplo_2/$ubicacion/info_nat.xml");
-			if(isset($xmls= $xml->rule)
-				echo "*";
-			else
-				$xmls= $xml->rule;
 			return $this->render('@App/nat/lista_nat.html.twig', array(
 				'ubicacion'=>$ubicacion,
 				'xmls'=>$xmls
