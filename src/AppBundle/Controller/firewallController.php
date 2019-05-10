@@ -182,29 +182,67 @@ class firewallController extends Controller
 
 	public function registro_firewallAction()
 	{
-		$plantel=$_REQUEST['id'];
+		#$plantel=$_REQUEST['id'];
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+		{
+			$plantel=$_REQUEST['plantel'];
+			$grupo=$_REQUEST['grupo'];
+		}
+		else
+		{
+			$grupo=$u->getGrupo();
+			$plantel=$_REQUEST['id'];
+		}
 		$obtener_nombre_interfas = $this->obtener_nombre_interfas($plantel);
-		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
-			$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_squidguardacl.xml");
-			$target_rule = implode(" ",$_POST['lista_target']);
-			$product = $xml->addChild('config');
-			$product->addChild('disabled', $_POST['estado']);
-			$product->addChild('name', $_POST['nombre']);
-			$product->addChild('source', $_POST['cliente']);
-			$product->addChild('time', "");
-			$product->addChild('dest', $target_rule." all [ all]");
-			$product->addChild('notallowingip', $_POST['not_ip']);
-			$product->addChild('redirect_mode', $_POST['modo_redireccion']);
-			$product->addChild('redirect', $_POST['redireccion']);
-			$product->addChild('safesearch', "on");
-			$product->addChild('rewrite', "");
-			$product->addChild('overrewrite', "");
-			$product->addChild('description', $_POST['descripcion']);
-			$product->addChild('enablelog', $_POST['log']);
-			file_put_contents("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", $xml->asXML());
-			$contenido = "\t\t<squidguardacl>\n";
+			$xml = simplexml_load_file("clients/$grupo/$plantel/info_filter.xml");
+			foreach($xml->config as $config)
+			{
+				if($config->name==$_POST['nombre'])
+				{
+					$estatus="The name that you try to register already exists in ".$plantel.".";
+				$this->session->getFlashBag()->add("estatus",$estatus);
+				return $this->redirectToRoute("grupos_firewall");
+
+				}
+			}
+			$product = $xml->addChild('rule');
+			$product->addChild('id',"");
+			$product->addChild('tracker', "1511810932");
+			$product->addChild('type', $_POST['action']);
+			$product->addChild('interface', $_POST['interface']);
+			$product->addChild('ipprotocol', $_POST['adress']);
+			$product->addChild('tag', "");
+			$product->addChild('tagged', "");
+			$product->addChild('max', "");
+			$product->addChild('max-src-nodes', "");
+			$product->addChild('max-src-conn', "");
+			$product->addChild('max-src-states', "");
+			$product->addChild('statetimeout', "");
+			$product->addChild('statetype', "");
+			$product->addChild('os', "");
+			$product->addChild('protocol', $_POST['protocolo']);
+			if(isset($_POST['icmp_subtypes']))
+			{
+				$numero = count($_POST['icmp_subtypes']);
+				//echo $numero;
+				foreach ($_POST['icmp_subtypes'] as $icmp) 
+				{
+					if($numero == 1)
+						echo $icmp;
+					else
+						echo $icmp . ",";
+					
+					//$product->addChild('icmptype', $icmp);
+				}
+				die();
+			}
+
+			file_put_contents("clients/$grupo/$plantel/info_filter.xml", $xml->asXML());
+			/*$contenido = "\t\t<squidguardacl>\n";
 			foreach($xml->config as $config)
 			{
 			    $contenido .= "\t\t\t<config>\n";
@@ -224,15 +262,19 @@ class firewallController extends Controller
 			    $contenido .= "\t\t\t</config>\n";
 			}
 		    $contenido .= "\t\t</squidguardacl>";
-			$archivo = fopen("clients/Ejemplo_2/$plantel/info_squidguardacl.xml", 'w');
+			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
+			# Aplicar cambios #
+			$archivo_cambio = fopen("clients/$grupo/$plantel/change_filter.xml", 'w');
+			fwrite($archivo_cambio, $contenido);
+			fclose($archivo_cambio);*/
 			return $this->redirectToRoute("grupos_acl");
 		}
 		return $this->render('@App/firewall/registro_firewall.html.twig', array(
+			'grupo'=>$grupo,
 			'plantel'=>$plantel,
-			'obtener_nombre_interfas'=>$obtener_nombre_interfas,
-			'xmls'=>$xmls= $xml->config
+			'obtener_nombre_interfas'=>$obtener_nombre_interfas
 		));
 	}
 

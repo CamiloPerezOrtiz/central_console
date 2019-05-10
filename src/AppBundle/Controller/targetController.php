@@ -105,6 +105,10 @@ class targetController extends Controller
 			$archivo = fopen("clients/$grupo/$plantel/info_squidguarddest.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
+			# Archivo de cambios #
+			$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguarddest.xml", 'w');
+			fwrite($archivo_cambio, $contenido);
+			fclose($archivo_cambio);
 			return $this->redirectToRoute("grupos_target");
 		}
 		foreach($xml->config as $config)
@@ -176,6 +180,10 @@ class targetController extends Controller
 		$archivo = fopen("clients/$grupo/$plantel/info_squidguarddest.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
+		# Archivo de cambios #
+		$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguarddest.xml", 'w');
+		fwrite($archivo_cambio, $contenido);
+		fclose($archivo_cambio);
 		return $this->redirectToRoute("grupos_target");
 	}	
 
@@ -235,6 +243,10 @@ class targetController extends Controller
 				$archivo = fopen("clients/$grupo/$plantel_grupo/info_squidguarddest.xml", 'w');
 				fwrite($archivo, $contenido);
 				fclose($archivo);
+				# Archivo de cambios #
+				$archivo_cambio = fopen("clients/$grupo/$plantel_grupo/change_squidguarddest.xml", 'w');
+				fwrite($archivo_cambio, $contenido);
+				fclose($archivo_cambio);
 			}
 			return $this->redirectToRoute("grupos_target");
 		}

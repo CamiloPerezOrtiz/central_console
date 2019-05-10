@@ -120,6 +120,10 @@ class aclController extends Controller
 			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
+			# Aplicar cambios #
+			$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguardacl.xml", 'w');
+			fwrite($archivo_cambio, $contenido);
+			fclose($archivo_cambio);
 			return $this->redirectToRoute("grupos_acl");
 		}
 		foreach($xml->config as $config)
@@ -202,6 +206,10 @@ class aclController extends Controller
 		$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
+		# Aplicar cambios #
+		$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguardacl.xml", 'w');
+		fwrite($archivo_cambio, $contenido);
+		fclose($archivo_cambio);
 		return $this->redirectToRoute("grupos_acl");
 	}	
 
@@ -272,6 +280,10 @@ class aclController extends Controller
 			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
+			# Aplicar cambios #
+			$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguardacl.xml", 'w');
+			fwrite($archivo_cambio, $contenido);
+			fclose($archivo_cambio);
 			return $this->redirectToRoute("grupos_acl");
 		}
 		return $this->render('@App/acl/registro_acl.html.twig', array(

@@ -91,6 +91,10 @@ class aliasesController extends Controller
 			$archivo = fopen("clients/$grupo/$plantel/info_aliases.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
+			# Aplicar cambios #
+			$archivo_cambio = fopen("clients/$grupo/$plantel/change_aliases.xml", 'w');
+			fwrite($archivo_cambio, $contenido);
+			fclose($archivo_cambio);
 			return $this->redirectToRoute("grupos_aliases");
 		}
 		foreach($xml->alias as $alias)
@@ -156,6 +160,10 @@ class aliasesController extends Controller
 		$archivo = fopen("clients/$grupo/$plantel/info_aliases.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
+		# Aplicar cambios #
+		$archivo_cambio = fopen("clients/$grupo/$plantel/change_aliases.xml", 'w');
+		fwrite($archivo_cambio, $contenido);
+		fclose($archivo_cambio);
 		return $this->redirectToRoute("grupos_aliases");
 	}	
 
@@ -226,6 +234,10 @@ class aliasesController extends Controller
 				$archivo = fopen("clients/$grupo/$plantel_grupo/info_aliases.xml", 'w');
 				fwrite($archivo, $contenido);
 				fclose($archivo);
+				# Aplicar cambios #
+				$archivo_cambio = fopen("clients/$grupo/$plantel_grupo/change_aliases.xml", 'w');
+				fwrite($archivo_cambio, $contenido);
+				fclose($archivo_cambio);
 			}
 			unlink("$ubicacion-archivo_ip.txt");
 			return $this->redirectToRoute("grupos_aliases");
