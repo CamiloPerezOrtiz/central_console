@@ -79,4 +79,34 @@
 				<description></description>
 				<enablelog>on</enablelog>
 			</config>
+			<config>
+				<name>cbcvb</name>
+				<domains>dfgdfg</domains>
+				<urls>dfgdfg</urls>
+				<expressions>dfgdfg</expressions>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<description>d</description>
+				<enablelog>off</enablelog>
+			</config>
+			<config>
+				<name>Pruebaxcv</name>
+				<domains>xcvvxc</domains>
+				<urls>cvxcvxc</urls>
+				<expressions>cxvcxv</expressions>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<description></description>
+				<enablelog>off</enablelog>
+			</config>
+			<config>
+				<name>hola</name>
+				<domains>hfhgfhgf</domains>
+				<urls>gfhgfhgf</urls>
+				<expressions>hgfhgfhgfh</expressions>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect>gfhgfhgfh</redirect>
+				<description>gfhgfhgfh</description>
+				<enablelog>off</enablelog>
+			</config>
 		</squidguarddest>

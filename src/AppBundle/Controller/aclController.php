@@ -52,7 +52,8 @@ class aclController extends Controller
 			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_squidguardacl.xml");
 			return $this->render('@App/acl/lista_acl.html.twig', array(
 				'ubicacion'=>$ubicacion,
-				'xmls'=>$xmls= $xml->config
+				'xmls'=>$xmls= $xml->config,
+				'grupo'=>$grupo
 			));
 		}
 	    return $this->render('@App/plantillas/solicitud_grupo.html.twig', array(
@@ -62,13 +63,13 @@ class aclController extends Controller
 
 	public function editar_aclAction()
 	{
+		$plantel=$_POST['plantel'];
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
 			$grupo=$_REQUEST['grupo'];
 		else
 			$grupo=$u->getGrupo();
-		$plantel=$_POST['plantel'];
 		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguardacl.xml");
 		$xml2 = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
@@ -139,6 +140,7 @@ class aclController extends Controller
 			}
 		}
 		return $this->render("@App/acl/editar_acl.html.twig",array(
+			"grupo"=>$grupo,
 			"ubicacion"=>$plantel,
 			"estado"=>$estado,
 			"nombre"=>$nombre,
@@ -208,10 +210,15 @@ class aclController extends Controller
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
+		{
+			$plantel=$_REQUEST['plantel'];
 			$grupo=$_REQUEST['grupo'];
+		}
 		else
+		{
 			$grupo=$u->getGrupo();
-		$plantel=$_REQUEST['id'];
+			$plantel=$_REQUEST['id'];
+		}
 		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
 		if(isset($_POST['guardar']))
 		{
@@ -268,6 +275,7 @@ class aclController extends Controller
 			return $this->redirectToRoute("grupos_acl");
 		}
 		return $this->render('@App/acl/registro_acl.html.twig', array(
+			'grupo'=>$grupo,
 			'plantel'=>$plantel,
 			'xmls'=>$xmls= $xml->config,
 			"lista_negra"=>$lista_negra = file("blacklist.txt")
@@ -305,6 +313,13 @@ class aclController extends Controller
 		$params =array();
 		$stmt->execute($params);
 		$grupos=$stmt->fetchAll();
+		return $grupos;
+	}
+	private function obtener_plantel_nombre()
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$query = $em->createQuery('SELECT DISTINCT g.descripcion FROM AppBundle:grupos g ORDER BY g.nombre ASC');
+		$grupos = $query->getResult();
 		return $grupos;
 	}
 }

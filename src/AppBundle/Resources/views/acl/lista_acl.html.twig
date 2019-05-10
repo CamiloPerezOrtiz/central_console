@@ -13,6 +13,13 @@
                         {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
                             <a href="{{ path('registro_acl',{'id': ubicacion }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
                         {% endif %} 
+                        {% if app.user.role == 'ROLE_SUPERUSER' %}
+                            <form method="post" action="{{ path('registro_acl') }}">
+                                <input type="hidden" name="plantel" value="{{ubicacion}}">
+                                <input type="hidden" name="grupo" value="{{grupo}}">
+                                <button class="btn btn-success btn-flat" type="submit">Add groups ACL </button>
+                            </form>
+                        {% endif %} 
                     </div>
                     <div class="box-body">
                         <div class="box-body table-responsive no-padding">
@@ -47,6 +54,7 @@
                                                     <form method="post" action="{{ path('editar_acl') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-warning btn-xs" type="submit">Edit <i class="fa fa-edit"></i></button>
                                                     </form>
                                                 </td>
@@ -54,6 +62,7 @@
                                                     <form method="post" action="{{ path('eliminar_acl') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-danger btn-xs" type="submit">Delete <i class="fa fa-remove"></i></button>
                                                     </form>
                                                 </td>

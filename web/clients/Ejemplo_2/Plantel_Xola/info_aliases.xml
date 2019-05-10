@@ -69,11 +69,4 @@
 			<descr></descr>
 			<detail>Entry added Mon, 18 Sep 2017 11:22:59 -0500||Entry added Tue, 20 Feb 2018 09:07:57 -0600||Cisco||Entry added Wed, 11 Jul 2018 15:42:01 -0500||Entry added Wed, 13 Feb 2019 16:55:14 -0600</detail>
 		</alias>
-		<alias>
-			<name>Prueba</name>
-			<type>host</type>
-			<address>10.4.0.1 10.4.0.2</address>
-			<descr>Prueba</descr>
-			<detail>Becario 1 ||Becario 2</detail>
-		</alias>
 	</aliases>

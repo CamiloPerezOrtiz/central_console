@@ -51,6 +51,7 @@ class targetController extends Controller
 			$ubicacion = $_POST['ubicacion'];
 			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_squidguarddest.xml");
 			return $this->render('@App/target/lista_target.html.twig', array(
+				'grupo'=>$grupo,
 				'ubicacion'=>$ubicacion,
 				'xmls'=>$xmls= $xml->config
 			));
@@ -66,7 +67,7 @@ class targetController extends Controller
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
+			$grupo=$_POST['grupo'];
 		else
 			$grupo=$u->getGrupo();
 		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
@@ -130,7 +131,8 @@ class targetController extends Controller
 			"modo_redireccion"=>$modo_redireccion,
 			"redireccion"=>$redireccion,
 			"descripcion"=>$descripcion,
-			"log"=>$log
+			"log"=>$log,
+			"grupo"=>$grupo
 		));
 	}
 
@@ -140,7 +142,7 @@ class targetController extends Controller
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
+			$grupo=$_POST['grupo'];
 		else
 			$grupo=$u->getGrupo();
 		$libreria_dom = new \DOMDocument; 
@@ -183,7 +185,7 @@ class targetController extends Controller
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
-			$grupo=$_REQUEST['grupo'];
+			$grupo=$_REQUEST['id'];
 		else
 			$grupo=$u->getGrupo();
 		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($ubicacion);

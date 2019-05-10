@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            List groups ACL campus {{ubicacion}}
+            List aliases campus {{ubicacion}}
         </h1>
     </section>
     <section class="content">
@@ -11,7 +11,7 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
-                            <a href="{{ path('registro_aliases',{'id': app.user.grupo }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
+                            <a href="{{ path('registro_aliases',{'id': app.user.grupo }) }}" class="btn btn-success btn-flat">Add alias</a>
                         {% endif %} 
                     </div>
                     <div class="box-body">
@@ -47,6 +47,7 @@
                                                     <form method="post" action="{{ path('editar_aliases') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-warning btn-xs" type="submit">Edit <i class="fa fa-edit"></i></button>
                                                     </form>
                                                 </td>
@@ -54,6 +55,7 @@
                                                     <form method="post" action="{{ path('eliminar_aliases') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-danger btn-xs" type="submit">Delete <i class="fa fa-remove"></i></button>
                                                     </form>
                                                 </td>

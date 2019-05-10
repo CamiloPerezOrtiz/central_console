@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class aliasesController extends Controller
 {
@@ -28,8 +29,6 @@ class aliasesController extends Controller
 
 	public function lista_aliasesAction()
 	{
-		$em = $this->getDoctrine()->getEntityManager();
-		$db = $em->getConnection();
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
@@ -40,8 +39,9 @@ class aliasesController extends Controller
 		if(isset($_POST['solicitar']))
 		{
 			$ubicacion = $_POST['ubicacion'];
-			$xml = simplexml_load_file("clients/Ejemplo_2/$ubicacion/info_aliases.xml");
+			$xml = simplexml_load_file("clients/$grupo/$ubicacion/info_aliases.xml");
 			return $this->render('@App/aliases/lista_aliases.html.twig', array(
+				'grupo'=>$grupo,
 				'ubicacion'=>$ubicacion,
 				'xmls'=>$xmls= $xml->alias
 			));
@@ -54,7 +54,13 @@ class aliasesController extends Controller
 	public function editar_aliasesAction()
 	{
 		$plantel=$_POST['plantel'];
-		$xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_aliases.xml");
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_POST['grupo'];
+		else
+			$grupo=$u->getGrupo();
+		$xml = simplexml_load_file("clients/$grupo/$plantel/info_aliases.xml");
 		if(isset($_POST['guardar']))
 		{
 			$ip_port = implode(" ",$_POST['ip_port']);
@@ -69,7 +75,7 @@ class aliasesController extends Controller
 					$alias->detail = $descripcion_ip_port;
 				}
 			}
-			$xml->asXML('clients/Ejemplo_2/Plantel_Xola/info_aliases.xml');
+			$xml->asXML("clients/$grupo/$plantel/info_aliases.xml");
 			$contenido = "\t<aliases>\n";
 			foreach($xml->alias as $alias)
 			{
@@ -82,7 +88,7 @@ class aliasesController extends Controller
 			    $contenido .= "\t\t</alias>\n";
 			}
 		    $contenido .= "\t</aliases>";
-			$archivo = fopen("clients/Ejemplo_2/$plantel/info_aliases.xml", 'w');
+			$archivo = fopen("clients/$grupo/$plantel/info_aliases.xml", 'w');
 			fwrite($archivo, $contenido);
 			fclose($archivo);
 			return $this->redirectToRoute("grupos_aliases");
@@ -108,15 +114,22 @@ class aliasesController extends Controller
 			"nombre"=>$nombre,
 			"descripcion"=>$descripcion,
 			"tipo"=>$tipo,
-			"ubicacion"=>$plantel
+			"ubicacion"=>$plantel,
+			"grupo"=>$grupo
 		));
 	}
 
 	public function eliminar_aliasesAction()
 	{
 		$plantel=$_POST['plantel'];
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_POST['grupo'];
+		else
+			$grupo=$u->getGrupo();
 		$libreria_dom = new \DOMDocument; 
-	    $libreria_dom->load("clients/Ejemplo_2/$plantel/info_aliases.xml");
+	    $libreria_dom->load("clients/$grupo/$plantel/info_aliases.xml");
 	    $aliases = $libreria_dom->documentElement;
 	    $alias = $aliases->getElementsByTagName('alias');
 	    foreach ($alias as $nodo) 
@@ -126,8 +139,8 @@ class aliasesController extends Controller
 	        if($valor == $_POST['valor'])
 	            $aliases->removeChild($nodo);
 	    }
-	    $libreria_dom->save("clients/Ejemplo_2/$plantel/info_aliases.xml");
-	    $xml = simplexml_load_file("clients/Ejemplo_2/$plantel/info_aliases.xml");
+	    $libreria_dom->save("clients/$grupo/$plantel/info_aliases.xml");
+	    $xml = simplexml_load_file("clients/$grupo/$plantel/info_aliases.xml");
 		$contenido = "\t<aliases>\n";
 		foreach($xml->alias as $alias)
 		{
@@ -140,17 +153,23 @@ class aliasesController extends Controller
 		    $contenido .= "\t\t</alias>\n";
 		}
 	    $contenido .= "\t</aliases>";
-		$archivo = fopen("clients/Ejemplo_2/$plantel/info_aliases.xml", 'w');
+		$archivo = fopen("clients/$grupo/$plantel/info_aliases.xml", 'w');
 		fwrite($archivo, $contenido);
 		fclose($archivo);
 		return $this->redirectToRoute("grupos_aliases");
 	}	
 
-	public function registro_aliasesAction()
+	public function registro_aliasesAction(Request $request)
 	{
-		$grupo=$_REQUEST['id'];
-		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($grupo);
-		$informacion_interfaces_nombre = $this->informacion_interfaces_nombre($grupo);
+		$ubicacion=$_REQUEST['id'];
+		$u = $this->getUser();
+		$role=$u->getRole();
+		if($role == 'ROLE_SUPERUSER')
+			$grupo=$_REQUEST['id'];
+		else
+			$grupo=$u->getGrupo();
+		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($ubicacion);
+		$informacion_interfaces_nombre = $this->informacion_interfaces_nombre($ubicacion);
 		if(isset($_POST['guardar']))
 		{
 			$nombre_interfas = $_POST['nombre_interfas'];
@@ -161,10 +180,10 @@ class aliasesController extends Controller
 			# Consulta para obtener la ip de la interfaz selecionada #
 			foreach($_POST['plantel'] as $plantel_grupo)
 			{
-				$xml = simplexml_load_file("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml");
+				$xml = simplexml_load_file("clients/$grupo/$plantel_grupo/info_aliases.xml");
 				$informacion_interfaces_ip = $this->informacion_interfaces_ip($nombre_interfas, $plantel_grupo);
 				# Crear archivo temporal de las IPs #
-				$archivo_ip=fopen("$grupo-archivo_ip.txt","w") or die("Problemas con el servidor intente mas tarde.");
+				$archivo_ip=fopen("$ubicacion-archivo_ip.txt","w") or die("Problemas con el servidor intente mas tarde.");
 				foreach ($informacion_interfaces_ip as $obtener_ip_interfas) 
 				{
 					foreach ($obtener_ip_interfas as $ip_interfas) 
@@ -177,7 +196,7 @@ class aliasesController extends Controller
 						}
 						# Formato para la lectura del archivo temporal #
 						fputs($archivo_ip,"|"."\n");
-						$delimitador=file("$grupo-archivo_ip.txt");
+						$delimitador=file("$ubicacion-archivo_ip.txt");
 						foreach($delimitador as $dem)
 						{
 							list($ip_interfas) = explode('|', $dem);
@@ -189,7 +208,7 @@ class aliasesController extends Controller
 						$product->addChild('address', $formato_delimitador);
 						$product->addChild('descr', $descripcion);
 						$product->addChild('detail', $descripcion_ip_port);
-						file_put_contents("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml", $xml->asXML());
+						file_put_contents("clients/$grupo/$plantel_grupo/info_aliases.xml", $xml->asXML());
 					}
 				}
 				$contenido = "\t<aliases>\n";
@@ -204,11 +223,11 @@ class aliasesController extends Controller
 				    $contenido .= "\t\t</alias>\n";
 				}
 			    $contenido .= "\t</aliases>";
-				$archivo = fopen("clients/Ejemplo_2/$plantel_grupo/info_aliases.xml", 'w');
+				$archivo = fopen("clients/$grupo/$plantel_grupo/info_aliases.xml", 'w');
 				fwrite($archivo, $contenido);
 				fclose($archivo);
 			}
-			unlink("$grupo-archivo_ip.txt");
+			unlink("$ubicacion-archivo_ip.txt");
 			return $this->redirectToRoute("grupos_aliases");
 		}
 		return $this->render('@App/aliases/registro_aliases.html.twig', array(

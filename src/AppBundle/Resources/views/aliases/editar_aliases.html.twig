@@ -16,11 +16,12 @@
                     </div>
                     <form method="post">
                         <input type="hidden" name="plantel" value="{{ubicacion}}">
+                        <input type="hidden" name="grupo" value="{{grupo}}">
                         <div class="modal-body">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ nombre }}" placeholder="Writte the name">
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="{{ nombre }}" placeholder="Writte the name" readonly>
                                     <small class="help-block">
                                         Enter a unique name of this rule here. The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter. <br>
                                         The name must consist between 2 and 15 symbols [a-Z_0-9]. The first one must be a letter.

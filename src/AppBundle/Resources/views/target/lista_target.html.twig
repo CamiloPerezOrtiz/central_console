@@ -47,6 +47,7 @@
                                                     <form method="post" action="{{ path('editar_target') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-warning btn-xs" type="submit">Edit <i class="fa fa-edit"></i></button>
                                                     </form>
                                                 </td>
@@ -54,6 +55,7 @@
                                                     <form method="post" action="{{ path('eliminar_target') }}">
                                                         <input type="hidden" name="plantel" value="{{ubicacion}}">
                                                         <input type="hidden" name="valor" value="{{item.name}}">
+                                                        <input type="hidden" name="grupo" value="{{grupo}}">
                                                         <button class="btn btn-danger btn-xs" type="submit">Delete <i class="fa fa-remove"></i></button>
                                                     </form>
                                                 </td>
