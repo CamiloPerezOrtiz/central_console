@@ -209,70 +209,6 @@ class firewallController extends Controller
 
 				}
 			}
-			$product = $xml->addChild('rule');
-			$product->addChild('id',"");
-			$product->addChild('tracker', "1511810932");
-			$product->addChild('type', $_POST['action']);
-			$product->addChild('interface', $_POST['interface']);
-			$product->addChild('ipprotocol', $_POST['adress']);
-			$product->addChild('tag', "");
-			$product->addChild('tagged', "");
-			$product->addChild('max', "");
-			$product->addChild('max-src-nodes', "");
-			$product->addChild('max-src-conn', "");
-			$product->addChild('max-src-states', "");
-			$product->addChild('statetimeout', "");
-			$product->addChild('statetype', "");
-			$product->addChild('os', "");
-			if(isset($_POST['protocolo']) and $_POST['protocolo'] === 'any')
-				$nada = "Nada que hacer";
-			else
-				$product->addChild('protocol', $_POST['protocolo']);
-			if(isset($_POST['icmp_subtypes']) and $_POST['protocolo']=== 'icmp')
-			{
-				$numero = count($_POST['icmp_subtypes']);
-				$archivo=fopen("$plantel-icmp.txt","w") or die("Problemas con el servidor intente mas tarde.");
-				foreach ($_POST['icmp_subtypes'] as $icmp) 
-				{
-					if($numero == 1)
-						$icmp;
-					else
-						$icmp . ",";
-					fputs($archivo,$icmp. ",");
-				}
-				fputs($archivo,"|"."\n");
-				$delimitador=file("$plantel-icmp.txt");
-				foreach($delimitador as $dem)
-				{
-					list($ip_interfas) = explode('|', $dem);
-				}
-				$icmp = trim($ip_interfas, ",|");
-				$product->addChild('icmptype', $icmp);
-				unlink("$plantel-icmp.txt");
-			}
-			if(isset($_POST['sourceAdvancedType']) and $_POST['sourceAdvancedType'] === 'any')
-				$product->addChild('source')->addChild('any', $_POST['sourceAdvancedType']);
-			elseif(isset($_POST['sourceAdvancedType']) and $_POST['sourceAdvancedType'] === 'wan' or
-			$_POST['sourceAdvancedType'] === 'wanip' or $_POST['sourceAdvancedType'] === 'lan' or
-			$_POST['sourceAdvancedType'] === 'lanip' or $_POST['sourceAdvancedType'] === 'opt1' or
-			$_POST['sourceAdvancedType'] === 'opt1ip' or $_POST['sourceAdvancedType'] === 'opt2' or
-			$_POST['sourceAdvancedType'] === 'opt2ip' or $_POST['sourceAdvancedType'] === 'opt3' or
-			$_POST['sourceAdvancedType'] === 'opt3ip' or $_POST['sourceAdvancedType'] === 'pppoe' or
-			$_POST['sourceAdvancedType'] === 'l2tp')
-				$product->addChild('source')->addChild('network', $_POST['sourceAdvancedType']);
-			else
-				if($_POST['sourceAdvancedType'] === 'single')
-					$product->addChild('source')->addChild('address', $_POST['sourceAddresMask']);
-				elseif($_POST['sourceAdvancedType'] === 'network' and $_POST['sourceAdvancedAdressMask1'] === '32')
-					$product->addChild('source')->addChild('address', $_POST['sourceAddresMask']);
-				else
-					$product->addChild('source')->addChild('address', $_POST['sourceAddresMask'] . "/". $_POST['sourceAdvancedAdressMask1']);
-			if($_POST['sourceInvertMatch'] === 'on')
-				$product->addChild('source')->addChild('not', "");
-			$product->addChild('source')->addChild('port', $_POST['sourcePortRangeFrom']);
-			$product->addChild('descr', $_POST['descripcion']);
-			file_put_contents("clients/$grupo/$plantel/info_filter.xml", $xml->asXML());
-			//die();
 			$contenido = "\t<filter>\n";
 			foreach($xml->rule as $rule)
 			{
@@ -286,7 +222,7 @@ class firewallController extends Controller
 			    $contenido .= "\t\t\t<tagged>" . $rule->tagged . "</tagged>\n";
 			    $contenido .= "\t\t\t<max>" . $rule->max . "</max>\n";
 			    $contenido .= "\t\t\t<max-src-nodes>" . $rule->{'max-src-nodes'} . "</max-src-nodes>\n";
-			    $contenido .= "\t\t\t<max-src-conn><" . $rule->{'max-src-conn'} . "/max-src-conn>\n";
+			    $contenido .= "\t\t\t<max-src-conn>" . $rule->{'max-src-conn'} . "</max-src-conn>\n";
 			    $contenido .= "\t\t\t<max-src-states>" . $rule->{'max-src-states'} . "</max-src-states>\n";
 			    $contenido .= "\t\t\t<statetimeout>" . $rule->statetimeout . "</statetimeout>\n";
 			    $contenido .= "\t\t\t<statetype>" . $rule->statetype . "</statetype>\n";
@@ -341,6 +277,282 @@ class firewallController extends Controller
 			   	if($rule->disabled == true)
 			    	$contenido .= "\t\t\t<disabled>" . $rule->disabled . "</disabled>\n";
 			    $contenido .= "\t\t</rule>\n";
+			}
+			if(isset($_POST['guardar']))
+			{
+				$contenido .= "\t\t<rule>\n";
+				    $contenido .= "\t\t\t<id></id>\n";
+				    $contenido .= "\t\t\t<tracker>" . time() . "</tracker>\n";
+				    $contenido .= "\t\t\t<type>" . $_POST['action'] . "</type>\n";
+				    $contenido .= "\t\t\t<interface>" . $_POST['interface'] . "</interface>\n";
+				    $contenido .= "\t\t\t<ipprotocol>" . $_POST['adress'] . "</ipprotocol>\n";
+				    $contenido .= "\t\t\t<tag></tag>\n";
+				    $contenido .= "\t\t\t<tagged></tagged>\n";
+				    $contenido .= "\t\t\t<max></max>\n";
+				    $contenido .= "\t\t\t<max-src-nodes></max-src-nodes>\n";
+				    $contenido .= "\t\t\t<max-src-conn></max-src-conn>\n";
+				    $contenido .= "\t\t\t<max-src-states></max-src-states>\n";
+				    $contenido .= "\t\t\t<statetimeout></statetimeout>\n";
+				    $contenido .= "\t\t\t<statetype></statetype>\n";
+				    $contenido .= "\t\t\t<os></os>\n";
+				    if($_POST['protocolo'] === 'any')
+						$nada = "Nada que hacer";
+					else
+						$contenido .= "\t\t\t<protocol>" . $_POST['protocolo'] . "</protocol>\n";
+					if($_POST['protocolo']=== 'icmp')
+					{
+						$numero = count($_POST['icmp_subtypes']);
+						$archivo=fopen("$plantel-icmp.txt","w") or die("Problemas con el servidor intente mas tarde.");
+						foreach ($_POST['icmp_subtypes'] as $icmp) 
+						{
+							if($numero == 1)
+								$icmp;
+							else
+								$icmp . ",";
+							fputs($archivo,$icmp. ",");
+						}
+						fputs($archivo,"|"."\n");
+						$delimitador=file("$plantel-icmp.txt");
+						foreach($delimitador as $dem)
+						{
+							list($ip_interfas) = explode('|', $dem);
+						}
+						$icmp = trim($ip_interfas, ",|");
+						$contenido .= "\t\t\t<icmptype>" . $icmp . "</icmptype>\n";
+						unlink("$plantel-icmp.txt");
+					}
+					$contenido .= "\t\t\t<source>\n";
+						if($_POST['sourceAdvancedType'] === 'any')
+							$contenido .= "\t\t\t\t<any></any>\n";
+						elseif($_POST['sourceAdvancedType'] === 'wan' or
+						$_POST['sourceAdvancedType'] === 'wanip' or $_POST['sourceAdvancedType'] === 'lan' or
+						$_POST['sourceAdvancedType'] === 'lanip' or $_POST['sourceAdvancedType'] === 'opt1' or
+						$_POST['sourceAdvancedType'] === 'opt1ip' or $_POST['sourceAdvancedType'] === 'opt2' or
+						$_POST['sourceAdvancedType'] === 'opt2ip' or $_POST['sourceAdvancedType'] === 'opt3' or
+						$_POST['sourceAdvancedType'] === 'opt3ip' or $_POST['sourceAdvancedType'] === 'pppoe' or
+						$_POST['sourceAdvancedType'] === 'l2tp')
+							$contenido .= "\t\t\t\t<network>" . $_POST['sourceAdvancedType'] . "</network>\n";
+						else
+							if($_POST['sourceAdvancedType'] === 'single')
+								$contenido .= "\t\t\t\t<address>" . $_POST['sourceAddresMask'] . "</address>\n";
+							elseif($_POST['sourceAdvancedType'] === 'network' and $_POST['sourceAdvancedAdressMask1'] === '32')
+								$contenido .= "\t\t\t\t<address>" . $_POST['sourceAddresMask'] . "</address>\n";
+							else
+								$contenido .= "\t\t\t\t<address>" . $_POST['sourceAddresMask'] . "/". $_POST['sourceAdvancedAdressMask1'] . "</address>\n";
+						if($_POST['sourceInvertMatch'] === 'on')
+							$contenido .= "\t\t\t\t<not></not>\n";
+						if(empty($_POST['sourcePortRangeFrom']))
+							$nada= "Nada que hacer";
+						if($_POST['sourcePortRangeFrom'] === "any")
+							$nada= "Nada que hacer";
+						if(empty($_POST['sourcePortRangeCustom']) === empty($_POST['sourcePortRangeCustomTo']))
+							$nada= "Nada que hacer";
+						if($_POST['sourcePortRangeFrom'] === $_POST['sourcePortRangeTo'] and !empty($_POST['sourcePortRangeCustom']) and !empty($_POST['sourcePortRangeCustomTo']))
+							$contenido .= "\t\t\t\t<port>" . $_POST['sourcePortRangeCustom'] . "</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "5999")
+							$contenido .= "\t\t\t\t<port>5999</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "53")
+							$contenido .= "\t\t\t\t<port>53</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "21")
+							$contenido .= "\t\t\t\t<port>21</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "3000")
+							$contenido .= "\t\t\t\t<port>3000</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "80")
+							$contenido .= "\t\t\t\t<port>80</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "443")
+							$contenido .= "\t\t\t\t<port>443</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "5190")
+							$contenido .= "\t\t\t\t<port>5190</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "113")
+							$contenido .= "\t\t\t\t<port>113</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "993")
+							$contenido .= "\t\t\t\t<port>993</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "4500")
+							$contenido .= "\t\t\t\t<port>4500</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "500")
+							$contenido .= "\t\t\t\t<port>500</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1701")
+							$contenido .= "\t\t\t\t<port>1701</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "389")
+							$contenido .= "\t\t\t\t<port>389</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1755")
+							$contenido .= "\t\t\t\t<port>1755</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "7000")
+							$contenido .= "\t\t\t\t<port>7000</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "445")
+							$contenido .= "\t\t\t\t<port>445</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "3389")
+							$contenido .= "\t\t\t\t<port>3389</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1512")
+							$contenido .= "\t\t\t\t<port>1512</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1863")
+							$contenido .= "\t\t\t\t<port>1863</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "119")
+							$contenido .= "\t\t\t\t<port>119</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "123")
+							$contenido .= "\t\t\t\t<port>123</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "138")
+							$contenido .= "\t\t\t\t<port>138</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "137")
+							$contenido .= "\t\t\t\t<port>137</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "139")
+							$contenido .= "\t\t\t\t<port>139</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1194")
+							$contenido .= "\t\t\t\t<port>1194</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "110")
+							$contenido .= "\t\t\t\t<port>110</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "995")
+							$contenido .= "\t\t\t\t<port>995</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1723")
+							$contenido .= "\t\t\t\t<port>1723</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1812")
+							$contenido .= "\t\t\t\t<port>1812</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "1813")
+							$contenido .= "\t\t\t\t<port>1813</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "5004")
+							$contenido .= "\t\t\t\t<port>5004</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "5060")
+							$contenido .= "\t\t\t\t<port>5060</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "25")
+							$contenido .= "\t\t\t\t<port>25</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "465")
+							$contenido .= "\t\t\t\t<port>465</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "161")
+							$contenido .= "\t\t\t\t<port>161</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "162")
+							$contenido .= "\t\t\t\t<port>162</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "22")
+							$contenido .= "\t\t\t\t<port>22</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "3478")
+							$contenido .= "\t\t\t\t<port>3278</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "587")
+							$contenido .= "\t\t\t\t<port>587</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "3544")
+							$contenido .= "\t\t\t\t<port>3544</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "23")
+							$contenido .= "\t\t\t\t<port>23</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "69")
+							$contenido .= "\t\t\t\t<port>69</port>\n";
+						if($_POST['sourcePortRangeFrom'] === "5900")
+							$contenido .= "\t\t\t\t<port>5900</port>\n";
+					$contenido .= "\t\t\t</source>\n";
+					$contenido .= "\t\t\t<destination>\n";
+						if($_POST['destinationType'] === 'any')
+							$contenido .= "\t\t\t\t<any></any>\n";
+						elseif($_POST['destinationType'] === 'wan' or
+						$_POST['destinationType'] === 'wanip' or $_POST['destinationType'] === 'lan' or
+						$_POST['destinationType'] === 'lanip' or $_POST['destinationType'] === 'opt1' or
+						$_POST['destinationType'] === 'opt1ip' or $_POST['destinationType'] === 'opt2' or
+						$_POST['destinationType'] === 'opt2ip' or $_POST['destinationType'] === 'opt3' or
+						$_POST['destinationType'] === 'opt3ip' or $_POST['destinationType'] === 'pppoe' or
+						$_POST['destinationType'] === 'l2tp')
+							$contenido .= "\t\t\t\t<network>" . $_POST['destinationType'] . "</network>\n";
+						else
+							if($_POST['destinationType'] === 'single')
+								$contenido .= "\t\t\t\t<address>" . $_POST['destinationAddresMask'] . "</address>\n";
+							elseif($_POST['destinationType'] === 'network' and $_POST['sourceAdvancedAdressMask1'] === '32')
+								$contenido .= "\t\t\t\t<address>" . $_POST['destinationAddresMask'] . "</address>\n";
+							else
+								$contenido .= "\t\t\t\t<address>" . $_POST['destinationAddresMask'] . "/". $_POST['destinationAdressMask2'] . "</address>\n";
+						if($_POST['destinationInvertMatch'] === 'on')
+							$contenido .= "\t\t\t\t<not></not>\n";
+						if(empty($_POST['destinationPortRangeFrom']))
+							$nada= "Nada que hacer";
+						if($_POST['destinationPortRangeFrom'] === "any")
+							$nada= "Nada que hacer";
+						if(empty($_POST['sourcePortRangeCustom']) === empty($_POST['sourcePortRangeCustomTo']))
+							$nada= "Nada que hacer";
+						if($_POST['destinationPortRangeFrom'] === $_POST['sourcePortRangeTo'] and !empty($_POST['sourcePortRangeCustom']) and !empty($_POST['sourcePortRangeCustomTo']))
+							$contenido .= "\t\t\t\t<port>" . $_POST['sourcePortRangeCustom'] . "</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "5999")
+							$contenido .= "\t\t\t\t<port>5999</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "53")
+							$contenido .= "\t\t\t\t<port>53</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "21")
+							$contenido .= "\t\t\t\t<port>21</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "3000")
+							$contenido .= "\t\t\t\t<port>3000</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "80")
+							$contenido .= "\t\t\t\t<port>80</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "443")
+							$contenido .= "\t\t\t\t<port>443</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "5190")
+							$contenido .= "\t\t\t\t<port>5190</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "113")
+							$contenido .= "\t\t\t\t<port>113</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "993")
+							$contenido .= "\t\t\t\t<port>993</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "4500")
+							$contenido .= "\t\t\t\t<port>4500</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "500")
+							$contenido .= "\t\t\t\t<port>500</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1701")
+							$contenido .= "\t\t\t\t<port>1701</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "389")
+							$contenido .= "\t\t\t\t<port>389</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1755")
+							$contenido .= "\t\t\t\t<port>1755</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "7000")
+							$contenido .= "\t\t\t\t<port>7000</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "445")
+							$contenido .= "\t\t\t\t<port>445</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "3389")
+							$contenido .= "\t\t\t\t<port>3389</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1512")
+							$contenido .= "\t\t\t\t<port>1512</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1863")
+							$contenido .= "\t\t\t\t<port>1863</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "119")
+							$contenido .= "\t\t\t\t<port>119</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "123")
+							$contenido .= "\t\t\t\t<port>123</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "138")
+							$contenido .= "\t\t\t\t<port>138</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "137")
+							$contenido .= "\t\t\t\t<port>137</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "139")
+							$contenido .= "\t\t\t\t<port>139</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1194")
+							$contenido .= "\t\t\t\t<port>1194</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "110")
+							$contenido .= "\t\t\t\t<port>110</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "995")
+							$contenido .= "\t\t\t\t<port>995</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1723")
+							$contenido .= "\t\t\t\t<port>1723</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1812")
+							$contenido .= "\t\t\t\t<port>1812</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "1813")
+							$contenido .= "\t\t\t\t<port>1813</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "5004")
+							$contenido .= "\t\t\t\t<port>5004</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "5060")
+							$contenido .= "\t\t\t\t<port>5060</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "25")
+							$contenido .= "\t\t\t\t<port>25</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "465")
+							$contenido .= "\t\t\t\t<port>465</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "161")
+							$contenido .= "\t\t\t\t<port>161</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "162")
+							$contenido .= "\t\t\t\t<port>162</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "22")
+							$contenido .= "\t\t\t\t<port>22</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "3478")
+							$contenido .= "\t\t\t\t<port>3278</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "587")
+							$contenido .= "\t\t\t\t<port>587</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "3544")
+							$contenido .= "\t\t\t\t<port>3544</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "23")
+							$contenido .= "\t\t\t\t<port>23</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "69")
+							$contenido .= "\t\t\t\t<port>69</port>\n";
+						if($_POST['destinationPortRangeFrom'] === "5900")
+							$contenido .= "\t\t\t\t<port>5900</port>\n";
+					$contenido .= "\t\t\t</destination>\n";
+					$contenido .= "\t\t\t<descr>" . $_POST['descripcion'] . "</descr>\n";
+				$contenido .= "\t\t</rule>\n";   
 			}
 			$contenido .= "\t\t<separator>\n";
 				if($xml->separator== true)

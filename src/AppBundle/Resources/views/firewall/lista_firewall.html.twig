@@ -103,7 +103,11 @@
                                                     *
                                                 {% endif %}
                                             </td>
-                                            <td>{{ item.descr }}</td>
+                                            <td>
+                                                {% if item.descr is defined %}
+                                                    {{ item.descr }}
+                                                {% endif %}
+                                            </td>
                                             {% if app.user.role == 'ROLE_SUPERUSE' or app.user.role == 'ROLE_ADMINISTRATO' %}
                                                 <td>
                                                     <form method="post" action="{{ path('editar_acl') }}">
