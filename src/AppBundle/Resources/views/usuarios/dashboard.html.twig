@@ -12,10 +12,10 @@
                     <div class="inner">
                         <h3>
                             {% if app.user.role == 'ROLE_SUPERUSER' %}
-                                All groups
+                                All Groups
                             {% endif %}
                             {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
-                                Your group
+                                Your Group
                             {% endif %}
                         </h3>
                         <p>
@@ -33,10 +33,10 @@
                     <div class="inner">
                         <h3>
                             {% if app.user.role == 'ROLE_SUPERUSER' %}
-                                All users
+                                All Users
                             {% endif %}
                             {% if app.user.role == 'ROLE_ADMINISTRATOR' or app.user.role == 'ROLE_USER' %}
-                                Your users
+                                Users
                             {% endif %}
                         </h3>
                         <p>
@@ -52,7 +52,7 @@
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>T. categories</h3>
+                        <h3>Target categories</h3>
                         <p>Info</p>
                     </div>
                     <div class="icon">
@@ -64,7 +64,7 @@
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>ACL groups</h3>
+                        <h3>ACL Groups</h3>
                         <p>Info</p>
                     </div>
                     <div class="icon">
@@ -100,7 +100,7 @@
             <div class="col-lg-3 col-xs-6 responsive">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>Firewall rules</h3>
+                        <h3>Firewall Rules</h3>
                         <p>Info</p>
                     </div>
                     <div class="icon">

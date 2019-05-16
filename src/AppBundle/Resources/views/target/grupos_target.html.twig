@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Device
+            Target categories
         </h1>
     </section>
     <section class="content">
@@ -12,12 +12,11 @@
                     <div class="small-box bg-blue">
                         <div class="inner">
                             <h3>{{ grupos.nombre }}</h3>
-                            <p>Info</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-list"></i>
                         </div>
-                        <a href="{{ path('registro_target',{ id:grupos.nombre }) }}" class="small-box-footer">Register target categories <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ path('registro_target',{ id:grupos.nombre }) }}" class="small-box-footer">Create new target categorie <i class="fa fa-arrow-circle-right"></i></a>
                         <a href="{{ path('lista_target',{ grupo:grupos.nombre }) }}" class="small-box-footer">List target categories <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>

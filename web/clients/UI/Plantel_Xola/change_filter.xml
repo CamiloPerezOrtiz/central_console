@@ -55,6 +55,29 @@
 			</destination>
 			<descr></descr>
 		</rule>
+		<rule>
+			<id></id>
+			<tracker>1558036258</tracker>
+			<type>pass</type>
+			<interface>wan</interface>
+			<ipprotocol>inet</ipprotocol>
+			<tag></tag>
+			<tagged></tagged>
+			<max></max>
+			<max-src-nodes></max-src-nodes>
+			<max-src-conn></max-src-conn>
+			<max-src-states></max-src-states>
+			<statetimeout></statetimeout>
+			<statetype></statetype>
+			<os></os>
+			<source>
+				<any></any>
+			</source>
+			<destination>
+				<any></any>
+			</destination>
+			<descr></descr>
+		</rule>
 		<separator>
 			<lan></lan>
 			<opt1></opt1>

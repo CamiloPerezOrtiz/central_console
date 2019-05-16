@@ -182,13 +182,13 @@ class firewallController extends Controller
 
 	public function registro_firewallAction()
 	{
-		#$plantel=$_REQUEST['id'];
+		//$plantel=$_REQUEST['id'];
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
 		{
-			$plantel=$_REQUEST['plantel'];
-			$grupo=$_REQUEST['grupo'];
+			$plantel=$_REQUEST['id'];
+			$grupo=$_GET['id'];
 		}
 		else
 		{
@@ -198,6 +198,7 @@ class firewallController extends Controller
 		$obtener_nombre_interfas = $this->obtener_nombre_interfas($plantel);
 		if(isset($_POST['guardar']))
 		{
+			$grupos=$_POST['grupo'];
 			$xml = simplexml_load_file("clients/$grupo/$plantel/info_filter.xml");
 			foreach($xml->config as $config)
 			{

@@ -22,28 +22,28 @@ class editar_usuarioType extends AbstractType
     {
         $builder
             ->add('nombre', TextType::class,array(
-                "label"=>"Name: ",
+                "label"=>"Name ",
                 "required"=>true,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
                 )
             ))
             ->add('apellidos', TextType::class,array(
-                "label"=>"Last name: ",
+                "label"=>"Last name ",
                 "required"=>false,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
                 )
             ))
             ->add('email', EmailType::class,array(
-                "label"=>"Email: ",
+                "label"=>"Email ",
                 "required"=>true,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
                 )
             ))
             ->add('role',ChoiceType::class, array(
-                "label"=>"Role: ",
+                "label"=>"Role ",
                 "required"=>"required",
                 "attr"=>array(
                     "class"=>"form-control input-sm"
@@ -69,12 +69,12 @@ class editar_usuarioType extends AbstractType
             ))
             ->add('Save', SubmitType::class,array(
                 "attr"=>array(
-                    "class"=>"btn btn-success btn-block btn-sm"
+                    "class"=>"btn btn-success btn-sm"
                 )
             ))
             ->add('Clean', ResetType::class, array(
                 'attr' => array(
-                    'class' => 'btn btn-danger btn-block btn-sm'),
+                    'class' => 'btn btn-danger btn-sm'),
                 )
             )
         ;

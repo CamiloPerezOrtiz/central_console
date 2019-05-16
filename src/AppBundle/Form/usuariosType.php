@@ -22,7 +22,7 @@ class usuariosType extends AbstractType
     {
         $builder
             ->add('nombre', TextType::class,array(
-                "label"=>"Name: ",
+                "label"=>"Name ",
                 "required"=>true,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
@@ -36,14 +36,14 @@ class usuariosType extends AbstractType
                 )
             ))
             ->add('email', EmailType::class,array(
-                "label"=>"Email: ",
+                "label"=>"Email ",
                 "required"=>true,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
                 )
             ))
             ->add('role',ChoiceType::class, array(
-                "label"=>"Role: ",
+                "label"=>"Role ",
                 "required"=>true,
                 "attr"=>array(
                     "class"=>"form-control input-sm"
@@ -69,12 +69,12 @@ class usuariosType extends AbstractType
             ))
             ->add('Save', SubmitType::class,array(
                 "attr"=>array(
-                    "class"=>"btn btn-success btn-block btn-sm"
+                    "class"=>"btn btn-success btn-sm"
                 )
             ))
             ->add('Clean', ResetType::class, array(
                 'attr' => array(
-                    'class' => 'btn btn-danger btn-block btn-sm'),
+                    'class' => 'btn btn-danger btn-sm'),
                 )
             )
         ;
