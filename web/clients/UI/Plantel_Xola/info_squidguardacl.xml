@@ -1,2 +1,32 @@
 		<squidguardacl>
+			<config>
+				<disabled></disabled>
+				<name>yhernandez</name>
+				<source>322</source>
+				<time></time>
+				<dest>none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none none all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog></enablelog>
+			</config>
+			<config>
+				<disabled></disabled>
+				<name>camilo</name>
+				<source>78978</source>
+				<time></time>
+				<dest>^blackall all [ all]</dest>
+				<notallowingip></notallowingip>
+				<redirect_mode>rmod_none</redirect_mode>
+				<redirect></redirect>
+				<safesearch>on</safesearch>
+				<rewrite></rewrite>
+				<overrewrite></overrewrite>
+				<description></description>
+				<enablelog></enablelog>
+			</config>
 		</squidguardacl>

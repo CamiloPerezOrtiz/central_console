@@ -11,15 +11,8 @@
                 <div class="box box-primary">
                     <div class="box-header">
                         {% if app.user.role == 'ROLE_ADMINISTRATOR' %}
-                            <a href="{{ path('registro_acl',{'id': ubicacion }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
-                        {% endif %} 
-                        {% if app.user.role == 'ROLE_SUPERUSER' %}
-                            <form method="post" action="{{ path('registro_acl') }}">
-                                <input type="hidden" name="plantel" value="{{ubicacion}}">
-                                <input type="hidden" name="grupo" value="{{grupo}}">
-                                <button class="btn btn-success btn-flat" type="submit">Add groups ACL </button>
-                            </form>
-                        {% endif %} 
+                            <a href="{{ path('registro_acl',{'id': app.user.grupo }) }}" class="btn btn-success btn-flat">Add groups ACL</a>
+                        {% endif %}
                     </div>
                     <div class="box-body">
                         <div class="box-body table-responsive no-padding">

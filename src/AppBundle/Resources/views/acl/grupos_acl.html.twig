@@ -16,7 +16,9 @@
                         <div class="icon">
                             <i class="fa fa-list"></i>
                         </div>
+                        <a href="{{ path('registro_acl',{ id:grupos.nombre }) }}" class="small-box-footer">Create new ACL Groups <i class="fa fa-arrow-circle-right"></i></a>
                         <a href="{{ path('lista_acl',{ grupo:grupos.nombre }) }}" class="small-box-footer">List ACL Groups <i class="fa fa-arrow-circle-right"></i></a>
+
                     </div>
                 </div>
             {% endfor %}

@@ -215,81 +215,82 @@ class aclController extends Controller
 
 	public function registro_aclAction(Request $request)
 	{
+		$ubicacion=$_REQUEST['id'];
 		$u = $this->getUser();
 		$role=$u->getRole();
 		if($role == 'ROLE_SUPERUSER')
-		{
-			$plantel=$_REQUEST['plantel'];
-			$grupo=$_REQUEST['grupo'];
-		}
+			$grupo=$_REQUEST['id'];
 		else
-		{
 			$grupo=$u->getGrupo();
-			$plantel=$_REQUEST['id'];
-		}
-		$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguarddest.xml");
+		$informacion_interfaces_plantel = $this->informacion_interfaces_plantel($ubicacion);
 		if(isset($_POST['guardar']))
 		{
-			$xml = simplexml_load_file("clients/$grupo/$plantel/info_squidguardacl.xml");
-			foreach($xml->config as $config)
+			foreach($_POST['plantel'] as $plantel_grupo)
 			{
-				if($config->name==$_POST['nombre'])
+				$xml = simplexml_load_file("clients/$grupo/$plantel_grupo/info_squidguardacl.xml");
+				foreach($xml->config as $config)
 				{
-					$estatus="The name that you try to register already exists in ".$plantel.".";
-				$this->session->getFlashBag()->add("estatus",$estatus);
-				return $this->redirectToRoute("grupos_acl");
-
+					if($config->name==$_POST['nombre'])
+					{
+						$estatus="The name that you try to register already exists in ".$plantel_grupo.".";
+						$this->session->getFlashBag()->add("estatus",$estatus);
+						return $this->redirectToRoute("grupos_target");
+					}
 				}
 			}
-			$target_rule = implode(" ",$_POST['lista_target']);
-			$product = $xml->addChild('config');
-			$product->addChild('disabled', $_POST['estado']);
-			$product->addChild('name', $_POST['nombre']);
-			$product->addChild('source', $_POST['cliente']);
-			$product->addChild('time', "");
-			$product->addChild('dest', $target_rule." all [ all]");
-			$product->addChild('notallowingip', $_POST['not_ip']);
-			$product->addChild('redirect_mode', $_POST['modo_redireccion']);
-			$product->addChild('redirect', $_POST['redireccion']);
-			$product->addChild('safesearch', "on");
-			$product->addChild('rewrite', "");
-			$product->addChild('overrewrite', "");
-			$product->addChild('description', $_POST['descripcion']);
-			$product->addChild('enablelog', $_POST['log']);
-			file_put_contents("clients/$grupo/$plantel/info_squidguardacl.xml", $xml->asXML());
-			$contenido = "\t\t<squidguardacl>\n";
-			foreach($xml->config as $config)
+			foreach($_POST['plantel'] as $plantel_grupo)
 			{
-			    $contenido .= "\t\t\t<config>\n";
-			    $contenido .= "\t\t\t\t<disabled>" . $config->disabled . "</disabled>\n";
-			    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
-			    $contenido .= "\t\t\t\t<source>" . $config->source . "</source>\n";
-			    $contenido .= "\t\t\t\t<time>" . $config->time . "</time>\n";
-			    $contenido .= "\t\t\t\t<dest>" . $config->dest . "</dest>\n";
-			    $contenido .= "\t\t\t\t<notallowingip>" . $config->notallowingip . "</notallowingip>\n";
-			    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
-			    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
-			    $contenido .= "\t\t\t\t<safesearch>" . $config->safesearch . "</safesearch>\n";
-			    $contenido .= "\t\t\t\t<rewrite>" . $config->rewrite . "</rewrite>\n";
-			    $contenido .= "\t\t\t\t<overrewrite>" . $config->overrewrite . "</overrewrite>\n";
-			    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
-			    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
-			    $contenido .= "\t\t\t</config>\n";
+				$xml = simplexml_load_file("clients/$grupo/$plantel_grupo/info_squidguardacl.xml");
+				$target_rule = implode(" ",$_POST['lista_target']);
+				$product = $xml->addChild('config');
+				$product->addChild('disabled', $_POST['estado']);
+				$product->addChild('name', $_POST['nombre']);
+				$product->addChild('source', $_POST['cliente']);
+				$product->addChild('time', "");
+				$product->addChild('dest', $target_rule." all [ all]");
+				$product->addChild('notallowingip', $_POST['not_ip']);
+				$product->addChild('redirect_mode', $_POST['modo_redireccion']);
+				$product->addChild('redirect', $_POST['redireccion']);
+				$product->addChild('safesearch', "on");
+				$product->addChild('rewrite', "");
+				$product->addChild('overrewrite', "");
+				$product->addChild('description', $_POST['descripcion']);
+				$product->addChild('enablelog', $_POST['log']);
+				file_put_contents("clients/$grupo/$plantel_grupo/info_squidguardacl.xml", $xml->asXML());
+				$contenido = "\t\t<squidguardacl>\n";
+				foreach($xml->config as $config)
+				{
+				    $contenido .= "\t\t\t<config>\n";
+				    $contenido .= "\t\t\t\t<disabled>" . $config->disabled . "</disabled>\n";
+				    $contenido .= "\t\t\t\t<name>" . $config->name . "</name>\n";
+				    $contenido .= "\t\t\t\t<source>" . $config->source . "</source>\n";
+				    $contenido .= "\t\t\t\t<time>" . $config->time . "</time>\n";
+				    $contenido .= "\t\t\t\t<dest>" . $config->dest . "</dest>\n";
+				    $contenido .= "\t\t\t\t<notallowingip>" . $config->notallowingip . "</notallowingip>\n";
+				    $contenido .= "\t\t\t\t<redirect_mode>" . $config->redirect_mode . "</redirect_mode>\n";
+				    $contenido .= "\t\t\t\t<redirect>" . $config->redirect . "</redirect>\n";
+				    $contenido .= "\t\t\t\t<safesearch>" . $config->safesearch . "</safesearch>\n";
+				    $contenido .= "\t\t\t\t<rewrite>" . $config->rewrite . "</rewrite>\n";
+				    $contenido .= "\t\t\t\t<overrewrite>" . $config->overrewrite . "</overrewrite>\n";
+				    $contenido .= "\t\t\t\t<description>" . $config->description . "</description>\n";
+				    $contenido .= "\t\t\t\t<enablelog>" . $config->enablelog . "</enablelog>\n";
+				    $contenido .= "\t\t\t</config>\n";
+				}
+			    $contenido .= "\t\t</squidguardacl>";
+				$archivo = fopen("clients/$grupo/$plantel_grupo/info_squidguardacl.xml", 'w');
+				fwrite($archivo, $contenido);
+				fclose($archivo);
+				# Aplicar cambios #
+				$archivo_cambio = fopen("clients/$grupo/$plantel_grupo/change_squidguardacl.xml", 'w');
+				fwrite($archivo_cambio, $contenido);
+				fclose($archivo_cambio);
 			}
-		    $contenido .= "\t\t</squidguardacl>";
-			$archivo = fopen("clients/$grupo/$plantel/info_squidguardacl.xml", 'w');
-			fwrite($archivo, $contenido);
-			fclose($archivo);
-			# Aplicar cambios #
-			$archivo_cambio = fopen("clients/$grupo/$plantel/change_squidguardacl.xml", 'w');
-			fwrite($archivo_cambio, $contenido);
-			fclose($archivo_cambio);
 			return $this->redirectToRoute("grupos_acl");
 		}
 		return $this->render('@App/acl/registro_acl.html.twig', array(
 			'grupo'=>$grupo,
-			'plantel'=>$plantel,
-			'xmls'=>$xmls= $xml->config,
+			'ubicacion'=>$ubicacion,
+			'informacion_interfaces_plantel'=>$informacion_interfaces_plantel,
 			"lista_negra"=>$lista_negra = file("blacklist.txt")
 		));
 	}
